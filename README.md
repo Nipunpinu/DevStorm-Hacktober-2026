@@ -77,4 +77,4 @@ Contributions from team members help improve the project's functionality, access
 
 ## License
 
-No license has been specified for this project yet
+We have used MIT LICENSE.
