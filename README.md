@@ -46,6 +46,20 @@ YojanaSetu is a hackathon prototype intended to help users explore government we
 
 Eligibility results depend on the information provided by users and the accuracy and completeness of the available scheme data. Missing information should be identified rather than treated as proof of eligibility or ineligibility. Users should consult the relevant official government sources before applying.
 
+
+## Future Enhancements
+
+YojanaSetu aims to make government welfare schemes easier to access by improving document management, accessibility, and the application process. Future enhancements may include:
+
+- **DigiLocker Integration:** Integrate with [DigiLocker](https://www.digilocker.gov.in/) to help users securely access their digital documents, with their consent, and simplify document collection for scheme applications.
+
+- **Voice Input and Output:** Enable users to answer eligibility questions using voice input and listen to scheme details, eligibility results, and application instructions. This feature aims to improve accessibility for users who prefer spoken guidance.
+
+- **Document Compression:** Allow users to compress scanned documents and PDF files to meet application portal upload size limits while maintaining sufficient readability for verification.
+
+These planned enhancements aim to make YojanaSetu more accessible, convenient, and user-friendly, particularly for people facing language barriers or difficulties with digital document preparation.
+
+
 ## Project Status
 
 YojanaSetu is being developed as part of a hackathon project. Its features and scheme coverage may evolve during development.
