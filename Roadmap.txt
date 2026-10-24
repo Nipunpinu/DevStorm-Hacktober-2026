@@ -1,1 +1,29 @@
+ROADMAP (For Hacktober fest)
+
+01 Welcome page
+Explain what YojanaSetu does and let users start.
+
+02 User questionnaire
+Collect only the details needed to evaluate schemes.
+
+03 Eligibility analysis
+Compare the user's answers with each scheme's rules.
+
+04 Personalised scheme results
+Show potentially eligible, not eligible, and needs-more-information results.
+
+05 Why am I eligible or not?
+Explain each condition with PASS, FAIL, or UNKNOWN and show its source.
+
+06 Understand the benefits
+Explain benefits, limits, frequency, and important restrictions.
+
+07 Document checklist
+Show required documents and let users mark what they already have.
+
+08 Get missing documents
+Explain where and how to obtain each missing document, step by step.
+
+09 Apply for the scheme
+Provide official application links, process instructions, and a final checklist.
 
