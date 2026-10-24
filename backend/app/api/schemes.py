@@ -26,6 +26,7 @@ def list_schemes(
         output.append({
             "id": s.id,
             "slug": s.slug,
+            "name": loc["name"] or s.official_name,
             "official_name": s.official_name,
             "localized_name": loc["name"] or s.official_name,
             "ministry": s.ministry,

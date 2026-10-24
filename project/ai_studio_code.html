@@ -1256,7 +1256,18 @@
       }
 
       container.innerHTML = list.map((scheme, rankIdx) => {
-        const evalState = scheme.evaluation;
+        const evalState = scheme.evaluation || {
+          status: 'needs_verification',
+          satisfied_conditions: [],
+          violated_conditions: [],
+          missing_facts: []
+        };
+        const schemeName = scheme.name || scheme.localized_name || scheme.official_name || 'Civic Scheme';
+        const benefitVal = typeof scheme.numeric_benefit_value === 'number' ? scheme.numeric_benefit_value : 0;
+        const benefitSummary = scheme.benefit_summary || `Up to ₹${benefitVal.toLocaleString('en-IN')}`;
+        const docs = scheme.documents || [];
+        const mandatoryCount = docs.filter(d => d.is_mandatory).length || (scheme.mandatory_docs_count || 0);
+        const optionalCount = docs.filter(d => !d.is_mandatory).length || Math.max(0, (scheme.documents_count || 0) - mandatoryCount);
 
         let statusBadgeHtml = '';
         if (scheme.is_retired) {
@@ -1270,7 +1281,8 @@
         }
 
         if (scheme.is_retired) {
-          const ret = scheme.retired_details || {};
+          const reason = scheme.retired_reason || (scheme.retired_details && scheme.retired_details.reason) || 'Consolidated under modernized guidelines.';
+          const replacementSlug = scheme.replacement_scheme_slug || (scheme.retired_details && scheme.retired_details.replacementSchemeId) || 'pm-surya';
           return `
             <div class="bg-monarchBaseLight border-2 border-dashed border-monarchSage rounded-2xl p-6 shadow-xs opacity-90 space-y-4">
               <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
@@ -1278,20 +1290,20 @@
                   <div class="flex items-center gap-2 mb-1.5 flex-wrap">
                     ${statusBadgeHtml}
                     <span class="px-2.5 py-0.5 rounded-md bg-stone-200 text-stone-700 text-xs font-bold">
-                      ${escapeHtml(scheme.category_label)}
+                      ${escapeHtml(scheme.category_label || 'Archived Program')}
                     </span>
                   </div>
-                  <h3 class="text-lg font-black text-stone-800">${escapeHtml(scheme.name)}</h3>
-                  <p class="text-xs text-stone-500 font-bold">${escapeHtml(scheme.ministry)}</p>
+                  <h3 class="text-lg font-black text-stone-800">${escapeHtml(schemeName)}</h3>
+                  <p class="text-xs text-stone-500 font-bold">${escapeHtml(scheme.ministry || '')}</p>
                 </div>
               </div>
 
               <div class="bg-stone-100 border border-stone-300 rounded-xl p-3.5 space-y-2 text-xs">
                 <span class="font-black text-stone-800 block">⚠️ Why This Scheme Was Retired:</span>
-                <p class="text-stone-700 font-medium">${escapeHtml(ret.reason || 'Consolidated under modernized guidelines.')}</p>
+                <p class="text-stone-700 font-medium">${escapeHtml(reason)}</p>
                 <div class="pt-2 flex items-center justify-between border-t border-stone-200 mt-2">
                   <span class="font-bold text-stone-600">Active Modern Replacement:</span>
-                  <button onclick="toggleSchemeStatusView(false); openChecklist('${ret.replacementSchemeId}')" class="text-xs font-black text-monarchOchre hover:underline cursor-pointer">
+                  <button onclick="toggleSchemeStatusView(false); openChecklist('${replacementSlug}')" class="text-xs font-black text-monarchOchre hover:underline cursor-pointer">
                     View Replacement Scheme ➔
                   </button>
                 </div>
@@ -1313,16 +1325,16 @@
                     Rank #${rankIdx + 1}
                   </span>
                   <span class="px-2.5 py-0.5 rounded-md bg-monarchSageLight text-monarchEspresso text-xs font-bold border border-monarchSage">
-                    ${escapeHtml(scheme.category_label)}
+                    ${escapeHtml(scheme.category_label || scheme.category)}
                   </span>
                 </div>
-                <h3 class="text-lg font-black text-monarchEspresso">${escapeHtml(scheme.name)}</h3>
-                <p class="text-xs text-monarchEspressoLight font-bold">${escapeHtml(scheme.ministry)}</p>
+                <h3 class="text-lg font-black text-monarchEspresso">${escapeHtml(schemeName)}</h3>
+                <p class="text-xs text-monarchEspressoLight font-bold">${escapeHtml(scheme.ministry || '')}</p>
               </div>
               <div class="sm:text-right shrink-0">
                 <span class="text-[10px] uppercase font-black text-monarchOchre tracking-wider block">Estimated Benefit Value</span>
                 <span class="text-xs font-black text-monarchEspresso bg-monarchSageLight border border-monarchSage px-2.5 py-1 rounded-lg inline-block mt-0.5">
-                  ₹${scheme.numeric_benefit_value.toLocaleString('en-IN')} (${escapeHtml(scheme.benefit_summary)})
+                  ₹${benefitVal.toLocaleString('en-IN')} (${escapeHtml(benefitSummary)})
                 </span>
               </div>
             </div>
@@ -1334,10 +1346,10 @@
                   <span class="text-emerald-700">✓</span> Conditions Satisfied:
                 </span>
                 <ul class="space-y-1.5 text-xs text-emerald-950 font-medium">
-                  ${evalState.satisfied_conditions.length > 0
-            ? evalState.satisfied_conditions.map(q => `<li class="flex items-start gap-1.5"><span class="text-emerald-700 font-black">•</span> <span>${escapeHtml(q)}</span></li>`).join('')
-            : `<li class="text-slate-500 italic">No specific conditions recorded as met yet.</li>`
-          }
+                  ${(evalState.satisfied_conditions && evalState.satisfied_conditions.length > 0)
+                    ? evalState.satisfied_conditions.map(q => `<li class="flex items-start gap-1.5"><span class="text-emerald-700 font-black">•</span> <span>${escapeHtml(q)}</span></li>`).join('')
+                    : `<li class="text-slate-500 italic">No specific conditions recorded as met yet.</li>`
+                  }
                 </ul>
               </div>
 
@@ -1346,10 +1358,10 @@
                   <span class="text-amber-700">⚠️</span> Missing Facts / Disqualification Notes:
                 </span>
                 <ul class="space-y-1.5 text-xs text-amber-950 font-medium">
-                  ${evalState.violated_conditions.concat(evalState.missing_facts).length > 0
-            ? evalState.violated_conditions.concat(evalState.missing_facts).map(dq => `<li class="flex items-start gap-1.5"><span class="text-amber-700 font-black">ℹ</span> <span>${escapeHtml(dq)}</span></li>`).join('')
-            : `<li class="text-emerald-800 font-semibold">✓ No disqualifying criteria detected in profile.</li>`
-          }
+                  ${((evalState.violated_conditions || []).concat(evalState.missing_facts || [])).length > 0
+                    ? (evalState.violated_conditions || []).concat(evalState.missing_facts || []).map(dq => `<li class="flex items-start gap-1.5"><span class="text-amber-700 font-black">ℹ</span> <span>${escapeHtml(dq)}</span></li>`).join('')
+                    : `<li class="text-emerald-800 font-semibold">✓ No disqualifying criteria detected in profile.</li>`
+                  }
                 </ul>
               </div>
             </div>
@@ -1358,17 +1370,17 @@
             <div class="bg-monarchBaseLight/60 p-2.5 rounded-xl border border-monarchSage/40 flex flex-wrap items-center justify-between text-[11px] text-monarchEspresso">
               <span><strong>Source:</strong> ${escapeHtml(sourceName)}</span>
               <span class="font-bold px-2 py-0.5 rounded-full ${scheme.verification_status === 'verified' ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : 'bg-amber-100 text-amber-800 border border-amber-300'}">
-                ${sourceStatus} • Verified: ${scheme.last_verified_at || 'Pending'}
+                ${sourceStatus} • Verified: ${scheme.last_verified_at || 'Statutory Record'}
               </span>
             </div>
 
             <!-- Card Action Strip -->
             <div class="pt-2 flex flex-wrap items-center justify-between gap-3 border-t border-monarchSage/30">
               <button onclick="openChecklist('${scheme.slug}')" class="text-xs font-black text-monarchOchre hover:text-monarchOchreHover flex items-center gap-1 cursor-pointer">
-                📄 Prepare Certificates (${scheme.documents.filter(d => d.is_mandatory).length} Mandatory + ${scheme.documents.filter(d => !d.is_mandatory).length} Top-Up) ➔
+                📄 Prepare Certificates (${mandatoryCount} Mandatory + ${optionalCount} Top-Up) ➔
               </button>
               <div class="flex items-center gap-2">
-                <button onclick="askAIAboutScheme('${scheme.slug}', '${scheme.name.replace(/'/g, "\\'")}')" class="px-3 py-1.5 rounded-lg border border-monarchSage hover:bg-monarchBaseLight text-monarchEspresso text-xs font-bold cursor-pointer">
+                <button onclick="askAIAboutScheme('${scheme.slug}', '${escapeHtml(schemeName).replace(/'/g, "\\'")}')" class="px-3 py-1.5 rounded-lg border border-monarchSage hover:bg-monarchBaseLight text-monarchEspresso text-xs font-bold cursor-pointer">
                   Ask AI Guidance
                 </button>
                 <a href="${scheme.external_portal_url || 'https://india.gov.in'}" target="_blank" rel="noreferrer" class="px-3.5 py-1.5 rounded-lg bg-monarchEspresso hover:bg-black text-amber-200 text-xs font-black cursor-pointer inline-flex items-center gap-1">
@@ -1385,21 +1397,26 @@
     function openComparisonModal() {
       const modal = document.getElementById('comparisonModal');
       const tbody = document.getElementById('comparisonTableBody');
-      const activeList = [...evaluatedSchemes.filter(s => !s.is_retired)].sort((a, b) => b.numeric_benefit_value - a.numeric_benefit_value);
+      const activeList = [...evaluatedSchemes.filter(s => !s.is_retired)].sort((a, b) => (b.numeric_benefit_value || 0) - (a.numeric_benefit_value || 0));
 
       tbody.innerHTML = activeList.map((scheme, idx) => {
+        const evalState = scheme.evaluation || {};
         let statusText = 'Preliminary Match';
-        if (scheme.evaluation.status === 'does_not_match') statusText = 'Ineligible';
-        if (scheme.evaluation.status === 'needs_verification') statusText = 'Needs Verification';
+        if (evalState.status === 'does_not_match') statusText = 'Ineligible';
+        if (evalState.status === 'needs_verification') statusText = 'Needs Verification';
+
+        const schemeName = scheme.name || scheme.localized_name || scheme.official_name || 'Scheme';
+        const benefitVal = typeof scheme.numeric_benefit_value === 'number' ? scheme.numeric_benefit_value : 0;
+        const benefitSummary = scheme.benefit_summary || `Up to ₹${benefitVal.toLocaleString('en-IN')}`;
 
         return `
           <tr class="hover:bg-monarchBaseLight/50">
             <td class="p-3 font-bold text-monarchEspresso">
-              <span class="text-monarchOchre font-black mr-1">#${idx + 1}</span> ${escapeHtml(scheme.name)}
+              <span class="text-monarchOchre font-black mr-1">#${idx + 1}</span> ${escapeHtml(schemeName)}
             </td>
-            <td class="p-3 text-slate-600 font-medium">${escapeHtml(scheme.category_label)}</td>
-            <td class="p-3 font-black text-monarchOchre">₹${scheme.numeric_benefit_value.toLocaleString('en-IN')} <span class="text-[10px] text-slate-500 font-normal">(${escapeHtml(scheme.benefit_summary)})</span></td>
-            <td class="p-3 font-extrabold ${scheme.evaluation.status === 'potential_match' ? 'text-emerald-700' : 'text-amber-700'}">${statusText}</td>
+            <td class="p-3 text-slate-600 font-medium">${escapeHtml(scheme.category_label || scheme.category)}</td>
+            <td class="p-3 font-black text-monarchOchre">₹${benefitVal.toLocaleString('en-IN')} <span class="text-[10px] text-slate-500 font-normal">(${escapeHtml(benefitSummary)})</span></td>
+            <td class="p-3 font-extrabold ${evalState.status === 'potential_match' ? 'text-emerald-700' : 'text-amber-700'}">${statusText}</td>
             <td class="p-3">
               <button onclick="closeComparisonModal(); openChecklist('${scheme.slug}');" class="px-2.5 py-1 rounded bg-monarchSageLight text-monarchEspresso font-bold hover:bg-monarchSage text-[11px] cursor-pointer">
                 Review Docs
@@ -1417,8 +1434,29 @@
     }
 
     // --- Checklist Functions (Step 4) ---
-    function openChecklist(schemeSlug) {
+    async function openChecklist(schemeSlug) {
       activeChecklistSchemeSlug = schemeSlug;
+      let scheme = evaluatedSchemes.find(s => s.slug === schemeSlug);
+      // Fetch fresh checklist from backend for accurate documents
+      try {
+        const res = await fetch(`${API_BASE}/schemes/${schemeSlug}/checklist?lang=${selectedLanguage}`);
+        if (res.ok) {
+          const chkData = await res.json();
+          if (!scheme) {
+            scheme = {
+              slug: schemeSlug,
+              name: chkData.scheme_name,
+              documents: [...(chkData.mandatory_documents || []), ...(chkData.optional_documents || [])],
+              is_retired: false
+            };
+            evaluatedSchemes.push(scheme);
+          } else {
+            scheme.documents = [...(chkData.mandatory_documents || []), ...(chkData.optional_documents || [])];
+          }
+        }
+      } catch (err) {
+        console.warn("Could not fetch remote checklist", err);
+      }
       goToStep(4);
     }
 
@@ -1426,17 +1464,19 @@
       const scheme = evaluatedSchemes.find(s => s.slug === activeChecklistSchemeSlug) || evaluatedSchemes[0];
       if (!scheme) return;
 
-      document.getElementById('checklistHeaderTitle').textContent = `Checklist: ${scheme.name}`;
+      const schemeName = scheme.name || scheme.localized_name || scheme.official_name || 'Scheme';
+      document.getElementById('checklistHeaderTitle').textContent = `Checklist: ${schemeName}`;
 
       // Tab pills
       const pillsContainer = document.getElementById('checklistSchemePills');
       pillsContainer.innerHTML = evaluatedSchemes.filter(s => !s.is_retired).map(s => `
         <button onclick="openChecklist('${s.slug}')" class="px-2.5 py-1 rounded-lg cursor-pointer ${s.slug === scheme.slug ? 'bg-monarchEspresso text-amber-200 shadow-xs' : 'text-monarchEspresso hover:text-black'
-        }">${s.slug.toUpperCase()}</button>
+        }">${escapeHtml(s.slug.toUpperCase())}</button>
       `).join('');
 
-      const mandatoryDocs = scheme.documents.filter(d => d.is_mandatory);
-      const optionalDocs = scheme.documents.filter(d => !d.is_mandatory);
+      const docs = scheme.documents || [];
+      const mandatoryDocs = docs.filter(d => d.is_mandatory);
+      const optionalDocs = docs.filter(d => !d.is_mandatory);
 
       const totalMandatory = mandatoryDocs.length;
       const readyMandatory = mandatoryDocs.filter(d => d.ready).length;
@@ -1645,14 +1685,18 @@
           // Transform into evaluatedSchemes format for initial display
           evaluatedSchemes = list.map(s => ({
             ...s,
+            name: s.name || s.localized_name || s.official_name,
+            benefit_summary: s.benefit_summary || `Up to ₹${(s.numeric_benefit_value || 0).toLocaleString('en-IN')}`,
+            documents: s.documents || [],
+            mandatory_docs_count: s.mandatory_docs_count || 0,
+            documents_count: s.documents_count || 0,
             evaluation: {
               status: s.is_retired ? 'does_not_match' : 'needs_verification',
               status_label: s.is_retired ? 'Archived' : 'Complete Step 2 Assessment',
               satisfied_conditions: s.why_qualify || [],
               violated_conditions: s.why_not_qualify || [],
               missing_facts: ["Fill assessment form in Step 2 to compute preliminary eligibility."]
-            },
-            documents: []
+            }
           }));
         }
       } catch (e) {

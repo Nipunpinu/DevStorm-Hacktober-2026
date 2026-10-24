@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>YojanaSetu – National Civic Welfare & Eligibility Discovery Engine</title>
-  
+
   <!-- Modern Typography (Plus Jakarta Sans) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
   <!-- Tailwind CSS via CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -42,79 +44,115 @@
       width: 6px;
       height: 6px;
     }
+
     ::-webkit-scrollbar-track {
       background: #EEE9C1;
     }
+
     ::-webkit-scrollbar-thumb {
       background: #8DA28C;
       border-radius: 9999px;
     }
+
     ::-webkit-scrollbar-thumb:hover {
       background: #667B65;
     }
+
     @keyframes subtle-pulse {
-      0%, 100% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.06); opacity: 0.85; }
+
+      0%,
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+
+      50% {
+        transform: scale(1.06);
+        opacity: 0.85;
+      }
     }
+
     .pulse-glow {
       animation: subtle-pulse 2.2s infinite ease-in-out;
     }
   </style>
 </head>
 
-<body class="bg-monarchBase text-monarchEspresso font-sans antialiased min-h-screen flex flex-col selection:bg-monarchSageLight selection:text-monarchEspresso">
+<body
+  class="bg-monarchBase text-monarchEspresso font-sans antialiased min-h-screen flex flex-col selection:bg-monarchSageLight selection:text-monarchEspresso">
 
   <!-- Civic Emblem Tricolor Top Ribbon -->
-  <div class="h-1.5 w-full bg-gradient-to-r from-monarchOchre via-monarchBase to-monarchSage border-b border-monarchSage/40"></div>
+  <div
+    class="h-1.5 w-full bg-gradient-to-r from-monarchOchre via-monarchBase to-monarchSage border-b border-monarchSage/40">
+  </div>
 
   <!-- Backend Connection Banner (Shows if backend offline) -->
-  <div id="backendOfflineBanner" class="hidden bg-amber-500 text-stone-900 px-4 py-2 text-xs font-bold text-center border-b border-amber-600 flex items-center justify-center gap-2">
-    <span>⚠️ Backend not detected at http://localhost:8000. Run <code>uvicorn backend.app.main:app --reload</code> to connect to live SQL and LLM.</span>
+  <div id="backendOfflineBanner"
+    class="hidden bg-amber-500 text-stone-900 px-4 py-2 text-xs font-bold text-center border-b border-amber-600 flex items-center justify-center gap-2">
+    <span>⚠️ Backend not detected at http://localhost:8000. Run <code>uvicorn backend.app.main:app --reload</code> to
+      connect to live SQL and LLM.</span>
     <button onclick="checkBackendHealth()" class="underline ml-2 hover:text-black">Retry ↺</button>
   </div>
 
   <!-- Civic Header Navigation Bar -->
   <header class="sticky top-0 z-40 bg-monarchBaseCard/95 backdrop-blur-md border-b border-monarchSage/40 shadow-xs">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 h-18 flex items-center justify-between">
-      
+
       <!-- Brand & Emblem -->
       <div class="flex items-center gap-3 cursor-pointer" onclick="goToStep(1)">
-        <div class="w-11 h-11 rounded-xl bg-monarchEspresso flex items-center justify-center text-amber-200 font-extrabold shadow-md border border-monarchSage">
+        <div
+          class="w-11 h-11 rounded-xl bg-monarchEspresso flex items-center justify-center text-amber-200 font-extrabold shadow-md border border-monarchSage">
           <svg class="w-6 h-6 text-amber-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
+            </path>
           </svg>
         </div>
         <div>
           <div class="flex items-center gap-2">
             <span class="font-extrabold text-monarchEspresso text-xl tracking-tight">YojanaSetu</span>
-            <span class="text-[10px] font-black px-2 py-0.5 rounded-full bg-monarchSage/30 text-monarchEspresso border border-monarchSage" data-i18n="badge_ai">
+            <span
+              class="text-[10px] font-black px-2 py-0.5 rounded-full bg-monarchSage/30 text-monarchEspresso border border-monarchSage"
+              data-i18n="badge_ai">
               योजनासेतु AI
             </span>
           </div>
-          <p class="text-[11px] text-monarchEspressoLight font-medium" data-i18n="tagline_nav">National Civic Welfare & Subsidy Engine</p>
+          <p class="text-[11px] text-monarchEspressoLight font-medium" data-i18n="tagline_nav">National Civic Welfare &
+            Subsidy Engine</p>
         </div>
       </div>
 
       <!-- Navigation Steps Indicator (Desktop) & Language -->
       <div class="flex items-center gap-3 sm:gap-4">
-        <nav class="hidden lg:flex items-center gap-1 bg-monarchBaseLight px-3 py-1.5 rounded-full border border-monarchSage/50 text-xs font-semibold text-monarchEspresso">
-          <span id="nav-pill-1" class="px-2.5 py-1 rounded-full bg-monarchEspresso text-monarchBase font-bold transition-all" data-i18n="nav_step1">1. Language</span>
+        <nav
+          class="hidden lg:flex items-center gap-1 bg-monarchBaseLight px-3 py-1.5 rounded-full border border-monarchSage/50 text-xs font-semibold text-monarchEspresso">
+          <span id="nav-pill-1"
+            class="px-2.5 py-1 rounded-full bg-monarchEspresso text-monarchBase font-bold transition-all"
+            data-i18n="nav_step1">1. Language</span>
           <span class="text-monarchSage">›</span>
-          <span id="nav-pill-2" class="px-2.5 py-1 rounded-full text-monarchEspressoLight transition-all" data-i18n="nav_step2">2. Assessment</span>
+          <span id="nav-pill-2" class="px-2.5 py-1 rounded-full text-monarchEspressoLight transition-all"
+            data-i18n="nav_step2">2. Assessment</span>
           <span class="text-monarchSage">›</span>
-          <span id="nav-pill-3" class="px-2.5 py-1 rounded-full text-monarchEspressoLight transition-all" data-i18n="nav_step3">3. Matches</span>
+          <span id="nav-pill-3" class="px-2.5 py-1 rounded-full text-monarchEspressoLight transition-all"
+            data-i18n="nav_step3">3. Matches</span>
           <span class="text-monarchSage">›</span>
-          <span id="nav-pill-4" class="px-2.5 py-1 rounded-full text-monarchEspressoLight transition-all" data-i18n="nav_step4">4. Documents</span>
+          <span id="nav-pill-4" class="px-2.5 py-1 rounded-full text-monarchEspressoLight transition-all"
+            data-i18n="nav_step4">4. Documents</span>
           <span class="text-monarchSage">›</span>
-          <span id="nav-pill-5" class="px-2.5 py-1 rounded-full text-monarchEspressoLight transition-all" data-i18n="nav_step5">5. Official Links</span>
+          <span id="nav-pill-5" class="px-2.5 py-1 rounded-full text-monarchEspressoLight transition-all"
+            data-i18n="nav_step5">5. Official Links</span>
         </nav>
 
         <!-- Global Language Selector (14 Languages Supported) -->
-        <div class="flex items-center gap-1.5 bg-monarchBaseCard border-2 border-monarchSage/60 rounded-xl px-2.5 py-1.5 text-xs font-bold shadow-xs">
+        <div
+          class="flex items-center gap-1.5 bg-monarchBaseCard border-2 border-monarchSage/60 rounded-xl px-2.5 py-1.5 text-xs font-bold shadow-xs">
           <svg class="w-4 h-4 text-monarchOchre" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129">
+            </path>
           </svg>
-          <select id="headerLangSelect" onchange="changeLanguage(this.value)" class="bg-transparent focus:outline-none cursor-pointer text-monarchEspresso font-bold">
+          <select id="headerLangSelect" onchange="changeLanguage(this.value)"
+            class="bg-transparent focus:outline-none cursor-pointer text-monarchEspresso font-bold">
             <option value="en">English</option>
             <option value="hi">हिन्दी (Hindi)</option>
             <option value="ml">മലയാളം (Malayalam)</option>
@@ -142,21 +180,25 @@
     <!-- ================= STEP 1: WELCOME & LANGUAGE SELECTION ================= -->
     <section id="step-1" class="space-y-8">
       <div class="text-center max-w-2xl mx-auto pt-6 space-y-4">
-        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-monarchSageLight border border-monarchSage text-monarchEspresso text-xs font-bold">
+        <div
+          class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-monarchSageLight border border-monarchSage text-monarchEspresso text-xs font-bold">
           <span class="w-2 h-2 rounded-full bg-monarchOchre pulse-glow"></span>
           <span data-i18n="hero_pill">Intelligent Civic Welfare Navigation System</span>
         </div>
-        <h1 class="text-3xl sm:text-5xl font-black text-monarchEspresso tracking-tight leading-tight" data-i18n="hero_title">
+        <h1 class="text-3xl sm:text-5xl font-black text-monarchEspresso tracking-tight leading-tight"
+          data-i18n="hero_title">
           Government Welfare, Tailored to Your Identity.
         </h1>
         <p class="text-monarchEspressoLight text-base sm:text-lg leading-relaxed font-medium" data-i18n="hero_desc">
-          Eliminate bureaucratic confusion and endless paperwork. YojanaSetu analyzes your socio-economic background, location, and educational profile to match you with valid State and Central schemes in seconds.
+          Eliminate bureaucratic confusion and endless paperwork. YojanaSetu analyzes your socio-economic background,
+          location, and educational profile to match you with valid State and Central schemes in seconds.
         </p>
       </div>
 
       <!-- Language Cards Grid (14 Languages) -->
       <div class="bg-monarchBaseCard border-2 border-monarchSage rounded-2xl p-6 sm:p-8 shadow-sm space-y-6">
-        <h2 class="text-xs font-black uppercase tracking-wider text-monarchEspressoLight text-center" data-i18n="step1_guide">
+        <h2 class="text-xs font-black uppercase tracking-wider text-monarchEspressoLight text-center"
+          data-i18n="step1_guide">
           Step 1: Choose Your Preferred Language / अपनी भाषा का चयन करें
         </h2>
 
@@ -165,10 +207,12 @@
         </div>
 
         <div class="pt-4 flex justify-center">
-          <button onclick="goToStep(2)" class="inline-flex items-center gap-3 px-8 py-3.5 rounded-xl bg-monarchOchre hover:bg-monarchOchreHover text-white font-bold text-sm shadow-md shadow-monarchOchre/20 transition-all transform active:scale-95 cursor-pointer">
+          <button onclick="goToStep(2)"
+            class="inline-flex items-center gap-3 px-8 py-3.5 rounded-xl bg-monarchOchre hover:bg-monarchOchreHover text-white font-bold text-sm shadow-md shadow-monarchOchre/20 transition-all transform active:scale-95 cursor-pointer">
             <span data-i18n="btn_find_schemes">Find My Eligible Schemes</span>
             <svg class="w-4 h-4 text-amber-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3">
+              </path>
             </svg>
           </button>
         </div>
@@ -176,32 +220,53 @@
 
       <!-- Trust Pillars -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
-        <div class="p-4 bg-monarchBaseCard border border-monarchSage/60 rounded-xl flex items-center justify-center gap-3">
-          <svg class="w-5 h-5 text-monarchOchre shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
-          <span class="text-xs font-bold text-monarchEspresso" data-i18n="trust_dpdp">DPDP Act Aligned (No Aadhaar Stored)</span>
+        <div
+          class="p-4 bg-monarchBaseCard border border-monarchSage/60 rounded-xl flex items-center justify-center gap-3">
+          <svg class="w-5 h-5 text-monarchOchre shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z">
+            </path>
+          </svg>
+          <span class="text-xs font-bold text-monarchEspresso" data-i18n="trust_dpdp">DPDP Act Aligned (No Aadhaar
+            Stored)</span>
         </div>
-        <div class="p-4 bg-monarchBaseCard border border-monarchSage/60 rounded-xl flex items-center justify-center gap-3">
-          <svg class="w-5 h-5 text-monarchSageDark shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
-          <span class="text-xs font-bold text-monarchEspresso" data-i18n="trust_gazettes">Grounded in Official Gov Gazettes</span>
+        <div
+          class="p-4 bg-monarchBaseCard border border-monarchSage/60 rounded-xl flex items-center justify-center gap-3">
+          <svg class="w-5 h-5 text-monarchSageDark shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
+            </path>
+          </svg>
+          <span class="text-xs font-bold text-monarchEspresso" data-i18n="trust_gazettes">Grounded in Official Gov
+            Gazettes</span>
         </div>
-        <div class="p-4 bg-monarchBaseCard border border-monarchSage/60 rounded-xl flex items-center justify-center gap-3">
-          <svg class="w-5 h-5 text-monarchOchre shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-          <span class="text-xs font-bold text-monarchEspresso" data-i18n="trust_dbt">Direct Bank Transfer (DBT) Ready</span>
+        <div
+          class="p-4 bg-monarchBaseCard border border-monarchSage/60 rounded-xl flex items-center justify-center gap-3">
+          <svg class="w-5 h-5 text-monarchOchre shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+          </svg>
+          <span class="text-xs font-bold text-monarchEspresso" data-i18n="trust_dbt">Direct Bank Transfer (DBT)
+            Ready</span>
         </div>
       </div>
     </section>
 
     <!-- ================= STEP 2: DETAILED AI ASSESSMENT WIZARD ================= -->
-    <section id="step-2" class="hidden bg-monarchBaseCard border-2 border-monarchSage rounded-2xl p-6 sm:p-9 shadow-sm space-y-8">
-      
+    <section id="step-2"
+      class="hidden bg-monarchBaseCard border-2 border-monarchSage rounded-2xl p-6 sm:p-9 shadow-sm space-y-8">
+
       <!-- Assessment Header -->
       <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-monarchSage/30 gap-3">
         <div>
-          <span class="text-xs font-black text-monarchOchre uppercase tracking-wider" data-i18n="step2_pill">Step 2 of 5</span>
-          <h2 class="text-2xl font-black text-monarchEspresso" data-i18n="step2_title">Comprehensive Eligibility Assessment</h2>
-          <p class="text-xs text-monarchEspressoLight font-medium" data-i18n="step2_desc">Deterministic verification across demographic, social, and economic parameters.</p>
+          <span class="text-xs font-black text-monarchOchre uppercase tracking-wider" data-i18n="step2_pill">Step 2 of
+            5</span>
+          <h2 class="text-2xl font-black text-monarchEspresso" data-i18n="step2_title">Comprehensive Eligibility
+            Assessment</h2>
+          <p class="text-xs text-monarchEspressoLight font-medium" data-i18n="step2_desc">Deterministic verification
+            across demographic, social, and economic parameters.</p>
         </div>
-        <div class="inline-flex items-center gap-1.5 bg-monarchSageLight px-3 py-1.5 rounded-full text-xs font-bold text-monarchEspresso border border-monarchSage/50">
+        <div
+          class="inline-flex items-center gap-1.5 bg-monarchSageLight px-3 py-1.5 rounded-full text-xs font-bold text-monarchEspresso border border-monarchSage/50">
           <span data-i18n="step2_sections">Complete 4 Core Sections</span>
         </div>
       </div>
@@ -212,14 +277,16 @@
         <!-- SUBSECTION A: Basic Demographics -->
         <div id="substep-a" class="wizard-pane space-y-5">
           <h3 class="text-sm font-black uppercase text-monarchOchre tracking-wide flex items-center gap-2">
-            <span class="w-6 h-6 rounded-md bg-monarchSage text-monarchBase flex items-center justify-center text-xs">A</span>
+            <span
+              class="w-6 h-6 rounded-md bg-monarchSage text-monarchBase flex items-center justify-center text-xs">A</span>
             <span data-i18n="sec_demographics">Basic Demographics</span>
           </h3>
 
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div class="space-y-1.5">
               <label class="text-xs font-bold text-monarchEspresso block" data-i18n="lbl_gender">Gender Identity</label>
-              <select id="userGender" class="w-full bg-monarchBaseLight border border-monarchSage rounded-xl px-3.5 py-2.5 text-xs font-bold text-monarchEspresso focus:outline-none focus:ring-2 focus:ring-monarchOchre">
+              <select id="userGender"
+                class="w-full bg-monarchBaseLight border border-monarchSage rounded-xl px-3.5 py-2.5 text-xs font-bold text-monarchEspresso focus:outline-none focus:ring-2 focus:ring-monarchOchre">
                 <option value="Female" data-i18n="opt_female">Female</option>
                 <option value="Male" selected data-i18n="opt_male">Male</option>
                 <option value="Transgender" data-i18n="opt_transgender">Transgender</option>
@@ -229,7 +296,8 @@
 
             <div class="space-y-1.5">
               <label class="text-xs font-bold text-monarchEspresso block" data-i18n="lbl_age">Age Group</label>
-              <select id="userAgeGroup" class="w-full bg-monarchBaseLight border border-monarchSage rounded-xl px-3.5 py-2.5 text-xs font-bold text-monarchEspresso focus:outline-none focus:ring-2 focus:ring-monarchOchre">
+              <select id="userAgeGroup"
+                class="w-full bg-monarchBaseLight border border-monarchSage rounded-xl px-3.5 py-2.5 text-xs font-bold text-monarchEspresso focus:outline-none focus:ring-2 focus:ring-monarchOchre">
                 <option value="Under 18" data-i18n="opt_under18">Under 18 (School Age)</option>
                 <option value="18 - 25 years" selected data-i18n="opt_18_25">18 - 25 years (Youth / Student)</option>
                 <option value="26 - 45 years" data-i18n="opt_26_45">26 - 45 years (Working Adult)</option>
@@ -240,7 +308,8 @@
 
             <div class="space-y-1.5">
               <label class="text-xs font-bold text-monarchEspresso block" data-i18n="lbl_marital">Marital Status</label>
-              <select id="userMarital" class="w-full bg-monarchBaseLight border border-monarchSage rounded-xl px-3.5 py-2.5 text-xs font-bold text-monarchEspresso focus:outline-none focus:ring-2 focus:ring-monarchOchre">
+              <select id="userMarital"
+                class="w-full bg-monarchBaseLight border border-monarchSage rounded-xl px-3.5 py-2.5 text-xs font-bold text-monarchEspresso focus:outline-none focus:ring-2 focus:ring-monarchOchre">
                 <option value="Single / Unmarried" selected data-i18n="opt_single">Single / Unmarried</option>
                 <option value="Married" data-i18n="opt_married">Married</option>
                 <option value="Widowed / Surviving Spouse" data-i18n="opt_widowed">Widowed / Surviving Spouse</option>
@@ -253,14 +322,17 @@
         <!-- SUBSECTION B: Location & Geography -->
         <div id="substep-b" class="wizard-pane space-y-5 pt-4 border-t border-monarchSage/20">
           <h3 class="text-sm font-black uppercase text-monarchOchre tracking-wide flex items-center gap-2">
-            <span class="w-6 h-6 rounded-md bg-monarchSage text-monarchBase flex items-center justify-center text-xs">B</span>
+            <span
+              class="w-6 h-6 rounded-md bg-monarchSage text-monarchBase flex items-center justify-center text-xs">B</span>
             <span data-i18n="sec_location">Location & Region Type</span>
           </h3>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div class="space-y-1.5">
-              <label class="text-xs font-bold text-monarchEspresso block" data-i18n="lbl_state">State / Union Territory</label>
-              <select id="userState" class="w-full bg-monarchBaseLight border border-monarchSage rounded-xl px-3.5 py-2.5 text-xs font-bold text-monarchEspresso focus:outline-none focus:ring-2 focus:ring-monarchOchre">
+              <label class="text-xs font-bold text-monarchEspresso block" data-i18n="lbl_state">State / Union
+                Territory</label>
+              <select id="userState"
+                class="w-full bg-monarchBaseLight border border-monarchSage rounded-xl px-3.5 py-2.5 text-xs font-bold text-monarchEspresso focus:outline-none focus:ring-2 focus:ring-monarchOchre">
                 <option value="All India">All India / Central</option>
                 <option value="Uttar Pradesh" selected>Uttar Pradesh</option>
                 <option value="Maharashtra">Maharashtra</option>
@@ -282,8 +354,10 @@
             </div>
 
             <div class="space-y-1.5">
-              <label class="text-xs font-bold text-monarchEspresso block" data-i18n="lbl_region">Area / Region Classification</label>
-              <select id="userRegionType" class="w-full bg-monarchBaseLight border border-monarchSage rounded-xl px-3.5 py-2.5 text-xs font-bold text-monarchEspresso focus:outline-none focus:ring-2 focus:ring-monarchOchre">
+              <label class="text-xs font-bold text-monarchEspresso block" data-i18n="lbl_region">Area / Region
+                Classification</label>
+              <select id="userRegionType"
+                class="w-full bg-monarchBaseLight border border-monarchSage rounded-xl px-3.5 py-2.5 text-xs font-bold text-monarchEspresso focus:outline-none focus:ring-2 focus:ring-monarchOchre">
                 <option value="Rural" selected data-i18n="opt_rural">Rural (Gram Panchayat / Village)</option>
                 <option value="Urban" data-i18n="opt_urban">Urban (Municipality / Corporation)</option>
               </select>
@@ -294,14 +368,17 @@
         <!-- SUBSECTION C: Social Category & Background -->
         <div id="substep-c" class="wizard-pane space-y-5 pt-4 border-t border-monarchSage/20">
           <h3 class="text-sm font-black uppercase text-monarchOchre tracking-wide flex items-center gap-2">
-            <span class="w-6 h-6 rounded-md bg-monarchSage text-monarchBase flex items-center justify-center text-xs">C</span>
+            <span
+              class="w-6 h-6 rounded-md bg-monarchSage text-monarchBase flex items-center justify-center text-xs">C</span>
             <span data-i18n="sec_social">Social Category & Special Background</span>
           </h3>
 
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div class="space-y-1.5">
-              <label class="text-xs font-bold text-monarchEspresso block" data-i18n="lbl_category">Social Category</label>
-              <select id="userCategory" class="w-full bg-monarchBaseLight border border-monarchSage rounded-xl px-3.5 py-2.5 text-xs font-bold text-monarchEspresso focus:outline-none focus:ring-2 focus:ring-monarchOchre">
+              <label class="text-xs font-bold text-monarchEspresso block" data-i18n="lbl_category">Social
+                Category</label>
+              <select id="userCategory"
+                class="w-full bg-monarchBaseLight border border-monarchSage rounded-xl px-3.5 py-2.5 text-xs font-bold text-monarchEspresso focus:outline-none focus:ring-2 focus:ring-monarchOchre">
                 <option value="OBC" selected>OBC (Other Backward Class)</option>
                 <option value="SC">SC (Scheduled Caste)</option>
                 <option value="ST">ST (Scheduled Tribe)</option>
@@ -311,19 +388,25 @@
             </div>
 
             <div class="space-y-1.5">
-              <label class="text-xs font-bold text-monarchEspresso block" data-i18n="lbl_minority">Religious / Linguistic Minority?</label>
-              <select id="userMinority" class="w-full bg-monarchBaseLight border border-monarchSage rounded-xl px-3.5 py-2.5 text-xs font-bold text-monarchEspresso focus:outline-none focus:ring-2 focus:ring-monarchOchre">
+              <label class="text-xs font-bold text-monarchEspresso block" data-i18n="lbl_minority">Religious /
+                Linguistic Minority?</label>
+              <select id="userMinority"
+                class="w-full bg-monarchBaseLight border border-monarchSage rounded-xl px-3.5 py-2.5 text-xs font-bold text-monarchEspresso focus:outline-none focus:ring-2 focus:ring-monarchOchre">
                 <option value="No" selected data-i18n="opt_no">No</option>
-                <option value="Yes" data-i18n="opt_minority_yes">Yes (Muslim, Christian, Sikh, Buddhist, Jain, Parsi)</option>
+                <option value="Yes" data-i18n="opt_minority_yes">Yes (Muslim, Christian, Sikh, Buddhist, Jain, Parsi)
+                </option>
               </select>
             </div>
 
             <div class="space-y-1.5">
-              <label class="text-xs font-bold text-monarchEspresso block" data-i18n="lbl_pwd">Person with Disability (PWD)?</label>
-              <select id="userDisability" class="w-full bg-monarchBaseLight border border-monarchSage rounded-xl px-3.5 py-2.5 text-xs font-bold text-monarchEspresso focus:outline-none focus:ring-2 focus:ring-monarchOchre">
+              <label class="text-xs font-bold text-monarchEspresso block" data-i18n="lbl_pwd">Person with Disability
+                (PWD)?</label>
+              <select id="userDisability"
+                class="w-full bg-monarchBaseLight border border-monarchSage rounded-xl px-3.5 py-2.5 text-xs font-bold text-monarchEspresso focus:outline-none focus:ring-2 focus:ring-monarchOchre">
                 <option value="None" selected data-i18n="opt_pwd_none">None (0%)</option>
                 <option value="Below 40%" data-i18n="opt_pwd_below40">Less than 40% Disability</option>
-                <option value="40% and Above (Benchmark)" data-i18n="opt_pwd_above40">40% or More (Benchmark Disability / UDID)</option>
+                <option value="40% and Above (Benchmark)" data-i18n="opt_pwd_above40">40% or More (Benchmark Disability
+                  / UDID)</option>
               </select>
             </div>
           </div>
@@ -332,41 +415,54 @@
         <!-- SUBSECTION D: Economic & Educational Status -->
         <div id="substep-d" class="wizard-pane space-y-5 pt-4 border-t border-monarchSage/20">
           <h3 class="text-sm font-black uppercase text-monarchOchre tracking-wide flex items-center gap-2">
-            <span class="w-6 h-6 rounded-md bg-monarchSage text-monarchBase flex items-center justify-center text-xs">D</span>
+            <span
+              class="w-6 h-6 rounded-md bg-monarchSage text-monarchBase flex items-center justify-center text-xs">D</span>
             <span data-i18n="sec_economic">Economic & Educational Status</span>
           </h3>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div class="space-y-1.5">
-              <label class="text-xs font-bold text-monarchEspresso block" data-i18n="lbl_student">Currently a Student?</label>
-              <select id="userStudentStatus" onchange="toggleStudentLevel(this.value)" class="w-full bg-monarchBaseLight border border-monarchSage rounded-xl px-3.5 py-2.5 text-xs font-bold text-monarchEspresso focus:outline-none focus:ring-2 focus:ring-monarchOchre">
+              <label class="text-xs font-bold text-monarchEspresso block" data-i18n="lbl_student">Currently a
+                Student?</label>
+              <select id="userStudentStatus" onchange="toggleStudentLevel(this.value)"
+                class="w-full bg-monarchBaseLight border border-monarchSage rounded-xl px-3.5 py-2.5 text-xs font-bold text-monarchEspresso focus:outline-none focus:ring-2 focus:ring-monarchOchre">
                 <option value="Yes" selected data-i18n="opt_student_yes">Yes, Currently Enrolled Student</option>
                 <option value="No" data-i18n="opt_student_no">No, Not Currently a Student</option>
               </select>
             </div>
 
             <div class="space-y-1.5" id="educationLevelContainer">
-              <label class="text-xs font-bold text-monarchEspresso block" data-i18n="lbl_education">Highest / Current Education Level</label>
-              <select id="userEducationLevel" class="w-full bg-monarchBaseLight border border-monarchSage rounded-xl px-3.5 py-2.5 text-xs font-bold text-monarchEspresso focus:outline-none focus:ring-2 focus:ring-monarchOchre">
-                <option value="Higher Secondary (10+2)" data-i18n="opt_higher_sec">Higher Secondary (Class 11-12)</option>
-                <option value="Undergraduate (BA/BSc/BCom/BTech)" selected data-i18n="opt_undergrad">Undergraduate / Diploma / ITI</option>
+              <label class="text-xs font-bold text-monarchEspresso block" data-i18n="lbl_education">Highest / Current
+                Education Level</label>
+              <select id="userEducationLevel"
+                class="w-full bg-monarchBaseLight border border-monarchSage rounded-xl px-3.5 py-2.5 text-xs font-bold text-monarchEspresso focus:outline-none focus:ring-2 focus:ring-monarchOchre">
+                <option value="Higher Secondary (10+2)" data-i18n="opt_higher_sec">Higher Secondary (Class 11-12)
+                </option>
+                <option value="Undergraduate (BA/BSc/BCom/BTech)" selected data-i18n="opt_undergrad">Undergraduate /
+                  Diploma / ITI</option>
                 <option value="Postgraduate / PhD" data-i18n="opt_postgrad">Postgraduate / Professional / PhD</option>
                 <option value="Secondary (10th)" data-i18n="opt_sec">Class 10 or Below</option>
               </select>
             </div>
 
             <div class="space-y-1.5">
-              <label class="text-xs font-bold text-monarchEspresso block" data-i18n="lbl_bpl">BPL (Below Poverty Line) Card Holder?</label>
-              <select id="userBPL" class="w-full bg-monarchBaseLight border border-monarchSage rounded-xl px-3.5 py-2.5 text-xs font-bold text-monarchEspresso focus:outline-none focus:ring-2 focus:ring-monarchOchre">
-                <option value="Yes" selected data-i18n="opt_bpl_yes">Yes (Antyodaya / BPL / Priority Ration Card)</option>
+              <label class="text-xs font-bold text-monarchEspresso block" data-i18n="lbl_bpl">BPL (Below Poverty Line)
+                Card Holder?</label>
+              <select id="userBPL"
+                class="w-full bg-monarchBaseLight border border-monarchSage rounded-xl px-3.5 py-2.5 text-xs font-bold text-monarchEspresso focus:outline-none focus:ring-2 focus:ring-monarchOchre">
+                <option value="Yes" selected data-i18n="opt_bpl_yes">Yes (Antyodaya / BPL / Priority Ration Card)
+                </option>
                 <option value="No" data-i18n="opt_bpl_no">No (Non-BPL / APL Card)</option>
               </select>
             </div>
 
             <div class="space-y-1.5">
-              <label class="text-xs font-bold text-monarchEspresso block" data-i18n="lbl_income">Total Household Annual Income</label>
-              <select id="userFamilyIncome" class="w-full bg-monarchBaseLight border border-monarchSage rounded-xl px-3.5 py-2.5 text-xs font-bold text-monarchEspresso focus:outline-none focus:ring-2 focus:ring-monarchOchre">
-                <option value="Below ₹1,00,000" selected data-i18n="opt_inc_below1l">Below ₹1,00,000 (Low-Income EWS)</option>
+              <label class="text-xs font-bold text-monarchEspresso block" data-i18n="lbl_income">Total Household Annual
+                Income</label>
+              <select id="userFamilyIncome"
+                class="w-full bg-monarchBaseLight border border-monarchSage rounded-xl px-3.5 py-2.5 text-xs font-bold text-monarchEspresso focus:outline-none focus:ring-2 focus:ring-monarchOchre">
+                <option value="Below ₹1,00,000" selected data-i18n="opt_inc_below1l">Below ₹1,00,000 (Low-Income EWS)
+                </option>
                 <option value="₹1,00,000 - ₹2,50,000">₹1,00,000 - ₹2,50,000</option>
                 <option value="₹2,50,000 - ₹5,00,000">₹2,50,000 - ₹5,00,000</option>
                 <option value="₹5,00,000 - ₹8,00,000">₹5,00,000 - ₹8,00,000</option>
@@ -378,10 +474,12 @@
 
         <!-- Navigation Buttons -->
         <div class="pt-6 border-t border-monarchSage/40 flex items-center justify-between">
-          <button type="button" onclick="goToStep(1)" class="px-4 py-2.5 rounded-lg border border-monarchSage text-monarchEspresso font-bold text-xs hover:bg-monarchBaseLight cursor-pointer">
+          <button type="button" onclick="goToStep(1)"
+            class="px-4 py-2.5 rounded-lg border border-monarchSage text-monarchEspresso font-bold text-xs hover:bg-monarchBaseLight cursor-pointer">
             <span data-i18n="btn_change_lang">← Change Language</span>
           </button>
-          <button id="btnSubmitAssessment" type="submit" class="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-monarchOchre hover:bg-monarchOchreHover text-white font-black text-xs shadow-md shadow-monarchOchre/20 cursor-pointer">
+          <button id="btnSubmitAssessment" type="submit"
+            class="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-monarchOchre hover:bg-monarchOchreHover text-white font-black text-xs shadow-md shadow-monarchOchre/20 cursor-pointer">
             <span data-i18n="btn_analyze">Analyze Scheme Eligibility</span>
             <span class="text-amber-200">➔</span>
           </button>
@@ -392,24 +490,27 @@
 
     <!-- ================= STEP 3: CUSTOM SCHEME RESULTS & COMPARISON ================= -->
     <section id="step-3" class="hidden space-y-6">
-      
+
       <!-- Evaluation Banner -->
-      <div class="bg-monarchEspresso text-monarchBase p-5 sm:p-6 rounded-2xl shadow-md border-2 border-monarchSage flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div
+        class="bg-monarchEspresso text-monarchBase p-5 sm:p-6 rounded-2xl shadow-md border-2 border-monarchSage flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div class="flex items-center gap-2 mb-1">
             <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 pulse-glow"></span>
-            <span class="text-xs font-black uppercase tracking-wider text-monarchSageLight" data-i18n="step3_badge">Deterministic Verification Engine</span>
+            <span class="text-xs font-black uppercase tracking-wider text-monarchSageLight"
+              data-i18n="step3_badge">Deterministic Verification Engine</span>
           </div>
           <h2 class="text-xl font-black text-white" data-i18n="step3_title">Eligible Central & State Schemes</h2>
           <p class="text-xs text-monarchBaseLight/80 mt-1" id="resultsSummaryChip">
-            Criteria: Rural • OBC • Student: Yes • Income < ₹1L • BPL Card
-          </p>
+            Criteria: Rural • OBC • Student: Yes • Income < ₹1L • BPL Card </p>
         </div>
         <div class="flex items-center gap-2">
-          <button onclick="openComparisonModal()" class="text-xs px-3.5 py-2 rounded-lg bg-monarchOchre hover:bg-monarchOchreHover text-white font-bold shadow-xs cursor-pointer flex items-center gap-1.5">
+          <button onclick="openComparisonModal()"
+            class="text-xs px-3.5 py-2 rounded-lg bg-monarchOchre hover:bg-monarchOchreHover text-white font-bold shadow-xs cursor-pointer flex items-center gap-1.5">
             <span data-i18n="btn_compare">📊 Compare Schemes</span>
           </button>
-          <button onclick="goToStep(2)" class="text-xs px-3 py-2 rounded-lg bg-monarchSage/30 hover:bg-monarchSage/50 text-amber-200 font-bold border border-monarchSage cursor-pointer">
+          <button onclick="goToStep(2)"
+            class="text-xs px-3 py-2 rounded-lg bg-monarchSage/30 hover:bg-monarchSage/50 text-amber-200 font-bold border border-monarchSage cursor-pointer">
             <span data-i18n="btn_adjust">✎ Adjust</span>
           </button>
         </div>
@@ -417,36 +518,53 @@
 
       <!-- Controls Bar: Category Filters & Sort By Benefit -->
       <div class="bg-monarchBaseCard border-2 border-monarchSage rounded-2xl p-4 shadow-xs space-y-3">
-        
+
         <!-- Category Filter Pills + Active/Retired Toggle -->
         <div class="flex flex-wrap items-center justify-between gap-2.5">
           <div class="flex flex-wrap items-center gap-1.5" id="categoryFilterContainer">
-            <button onclick="setCategoryFilter('all')" id="cat-all" class="px-3 py-1 rounded-full text-xs font-bold bg-monarchEspresso text-white cursor-pointer transition-all" data-i18n="filter_all">All Schemes</button>
-            <button onclick="setCategoryFilter('education')" id="cat-education" class="px-3 py-1 rounded-full text-xs font-bold bg-monarchBaseLight text-monarchEspresso border border-monarchSage hover:bg-monarchSageLight cursor-pointer transition-all" data-i18n="filter_edu">🎓 Education</button>
-            <button onclick="setCategoryFilter('farmers')" id="cat-farmers" class="px-3 py-1 rounded-full text-xs font-bold bg-monarchBaseLight text-monarchEspresso border border-monarchSage hover:bg-monarchSageLight cursor-pointer transition-all" data-i18n="filter_farm">🌾 Farmers & Agriculture</button>
-            <button onclick="setCategoryFilter('livelihood')" id="cat-livelihood" class="px-3 py-1 rounded-full text-xs font-bold bg-monarchBaseLight text-monarchEspresso border border-monarchSage hover:bg-monarchSageLight cursor-pointer transition-all" data-i18n="filter_live">💼 Livelihood & Business</button>
-            <button onclick="setCategoryFilter('disability')" id="cat-disability" class="px-3 py-1 rounded-full text-xs font-bold bg-monarchBaseLight text-monarchEspresso border border-monarchSage hover:bg-monarchSageLight cursor-pointer transition-all" data-i18n="filter_pwd">♿ Disability & Welfare</button>
+            <button onclick="setCategoryFilter('all')" id="cat-all"
+              class="px-3 py-1 rounded-full text-xs font-bold bg-monarchEspresso text-white cursor-pointer transition-all"
+              data-i18n="filter_all">All Schemes</button>
+            <button onclick="setCategoryFilter('education')" id="cat-education"
+              class="px-3 py-1 rounded-full text-xs font-bold bg-monarchBaseLight text-monarchEspresso border border-monarchSage hover:bg-monarchSageLight cursor-pointer transition-all"
+              data-i18n="filter_edu">🎓 Education</button>
+            <button onclick="setCategoryFilter('farmers')" id="cat-farmers"
+              class="px-3 py-1 rounded-full text-xs font-bold bg-monarchBaseLight text-monarchEspresso border border-monarchSage hover:bg-monarchSageLight cursor-pointer transition-all"
+              data-i18n="filter_farm">🌾 Farmers & Agriculture</button>
+            <button onclick="setCategoryFilter('livelihood')" id="cat-livelihood"
+              class="px-3 py-1 rounded-full text-xs font-bold bg-monarchBaseLight text-monarchEspresso border border-monarchSage hover:bg-monarchSageLight cursor-pointer transition-all"
+              data-i18n="filter_live">💼 Livelihood & Business</button>
+            <button onclick="setCategoryFilter('disability')" id="cat-disability"
+              class="px-3 py-1 rounded-full text-xs font-bold bg-monarchBaseLight text-monarchEspresso border border-monarchSage hover:bg-monarchSageLight cursor-pointer transition-all"
+              data-i18n="filter_pwd">♿ Disability & Welfare</button>
           </div>
 
           <!-- Active vs Retired Schemes Toggle -->
-          <div class="flex items-center gap-1 bg-monarchBaseLight p-1 rounded-xl border border-monarchSage/60 text-xs font-bold">
-            <button onclick="toggleSchemeStatusView(false)" id="tab-active-schemes" class="px-2.5 py-1 rounded-lg bg-monarchSageDark text-white shadow-2xs cursor-pointer">
+          <div
+            class="flex items-center gap-1 bg-monarchBaseLight p-1 rounded-xl border border-monarchSage/60 text-xs font-bold">
+            <button onclick="toggleSchemeStatusView(false)" id="tab-active-schemes"
+              class="px-2.5 py-1 rounded-lg bg-monarchSageDark text-white shadow-2xs cursor-pointer">
               <span data-i18n="tab_active">Active Schemes</span> (<span id="activeCountBadge">4</span>)
             </button>
-            <button onclick="toggleSchemeStatusView(true)" id="tab-retired-schemes" class="px-2.5 py-1 rounded-lg text-monarchEspresso hover:bg-monarchSageLight cursor-pointer">
+            <button onclick="toggleSchemeStatusView(true)" id="tab-retired-schemes"
+              class="px-2.5 py-1 rounded-lg text-monarchEspresso hover:bg-monarchSageLight cursor-pointer">
               <span data-i18n="tab_retired">Archived / Retired</span> (<span id="retiredCountBadge">2</span>)
             </button>
           </div>
         </div>
 
         <!-- Sort Strip -->
-        <div class="pt-2 border-t border-monarchSage/20 flex flex-col sm:flex-row sm:items-center justify-between text-xs gap-2">
+        <div
+          class="pt-2 border-t border-monarchSage/20 flex flex-col sm:flex-row sm:items-center justify-between text-xs gap-2">
           <span class="text-monarchEspressoLight font-bold flex items-center gap-1">
-            <span>💡</span> <span data-i18n="sort_tip">Tip: Sort by estimated monetary value to review significant benefits first.</span>
+            <span>💡</span> <span data-i18n="sort_tip">Tip: Sort by estimated monetary value to review significant
+              benefits first.</span>
           </span>
           <div class="flex items-center gap-2">
-            <label for="profitSortSelect" class="font-extrabold text-monarchEspresso" data-i18n="lbl_sortby">Sort by Benefit:</label>
-            <select id="profitSortSelect" onchange="changeSortOrder(this.value)" class="bg-monarchBaseLight border border-monarchSage rounded-lg px-2.5 py-1 text-xs font-bold text-monarchEspresso focus:outline-none focus:ring-1 focus:ring-monarchOchre">
+            <label for="profitSortSelect" class="font-extrabold text-monarchEspresso" data-i18n="lbl_sortby">Sort by
+              Benefit:</label>
+            <select id="profitSortSelect" onchange="changeSortOrder(this.value)"
+              class="bg-monarchBaseLight border border-monarchSage rounded-lg px-2.5 py-1 text-xs font-bold text-monarchEspresso focus:outline-none focus:ring-1 focus:ring-monarchOchre">
               <option value="profit-desc" data-i18n="opt_profit_desc">Highest Estimated Benefit (Most to Least)</option>
               <option value="profit-asc" data-i18n="opt_profit_asc">Lowest Estimated Benefit (Least to Most)</option>
               <option value="match-desc" data-i18n="opt_match_desc">Status / Priority</option>
@@ -463,10 +581,12 @@
 
       <!-- Advance CTA -->
       <div class="flex justify-between items-center pt-4">
-        <button onclick="goToStep(2)" class="px-4 py-2.5 rounded-lg border border-monarchSage text-monarchEspresso font-bold text-xs hover:bg-monarchBaseLight cursor-pointer">
+        <button onclick="goToStep(2)"
+          class="px-4 py-2.5 rounded-lg border border-monarchSage text-monarchEspresso font-bold text-xs hover:bg-monarchBaseLight cursor-pointer">
           <span data-i18n="btn_back_assess">← Back to Assessment</span>
         </button>
-        <button onclick="openChecklist('post-matric')" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-monarchSageDark hover:bg-monarchSage text-white font-bold text-xs shadow-md cursor-pointer">
+        <button onclick="openChecklist('post-matric')"
+          class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-monarchSageDark hover:bg-monarchSage text-white font-bold text-xs shadow-md cursor-pointer">
           <span data-i18n="btn_review_docs">Review Document Preparation</span>
           <span class="text-amber-200">➔</span>
         </button>
@@ -474,17 +594,23 @@
     </section>
 
     <!-- ================= STEP 4: INTERACTIVE DOCUMENT CHECKLIST ================= -->
-    <section id="step-4" class="hidden bg-monarchBaseCard border-2 border-monarchSage rounded-2xl p-6 sm:p-8 shadow-sm space-y-6">
-      
+    <section id="step-4"
+      class="hidden bg-monarchBaseCard border-2 border-monarchSage rounded-2xl p-6 sm:p-8 shadow-sm space-y-6">
+
       <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-monarchSage/30 gap-3">
         <div>
-          <span class="text-xs font-black text-monarchOchre uppercase tracking-wider" data-i18n="step4_pill">Step 4 of 5</span>
-          <h2 class="text-2xl font-black text-monarchEspresso" id="checklistHeaderTitle">Document Readiness Checklist</h2>
-          <p class="text-xs text-monarchEspressoLight font-medium" data-i18n="step4_desc">Click the info icon <span class="inline-block px-1 bg-monarchSageLight rounded text-[11px] font-bold">ℹ️</span> next to any certificate to view step-by-step instructions on how to procure it.</p>
+          <span class="text-xs font-black text-monarchOchre uppercase tracking-wider" data-i18n="step4_pill">Step 4 of
+            5</span>
+          <h2 class="text-2xl font-black text-monarchEspresso" id="checklistHeaderTitle">Document Readiness Checklist
+          </h2>
+          <p class="text-xs text-monarchEspressoLight font-medium" data-i18n="step4_desc">Click the info icon <span
+              class="inline-block px-1 bg-monarchSageLight rounded text-[11px] font-bold">ℹ️</span> next to any
+            certificate to view step-by-step instructions on how to procure it.</p>
         </div>
 
         <!-- Scheme Tab Switcher -->
-        <div class="flex items-center gap-1 bg-monarchSageLight p-1 rounded-xl text-xs font-bold flex-wrap" id="checklistSchemePills">
+        <div class="flex items-center gap-1 bg-monarchSageLight p-1 rounded-xl text-xs font-bold flex-wrap"
+          id="checklistSchemePills">
           <!-- Populated by JS -->
         </div>
       </div>
@@ -496,7 +622,8 @@
           <span class="text-monarchOchre font-black" id="checklistProgressPct">0% Ready</span>
         </div>
         <div class="w-full h-3 bg-monarchSage/30 rounded-full overflow-hidden">
-          <div id="checklistProgressBar" class="h-full bg-monarchOchre transition-all duration-300" style="width: 0%;"></div>
+          <div id="checklistProgressBar" class="h-full bg-monarchOchre transition-all duration-300" style="width: 0%;">
+          </div>
         </div>
       </div>
 
@@ -506,7 +633,8 @@
           <span data-i18n="sec_mandatory_docs">1. Mandatory Base Documents (Required for Sanction)</span>
           <span class="text-[10px] text-monarchOchre font-bold" data-i18n="badge_strict">Strictly Enforced</span>
         </h3>
-        <div class="divide-y divide-monarchSage/20 border-2 border-monarchSage rounded-xl overflow-hidden bg-white" id="mandatoryChecklistContainer">
+        <div class="divide-y divide-monarchSage/20 border-2 border-monarchSage rounded-xl overflow-hidden bg-white"
+          id="mandatoryChecklistContainer">
           <!-- Injected via JS -->
         </div>
       </div>
@@ -516,21 +644,28 @@
         <div class="flex items-center justify-between">
           <h3 class="text-xs font-black uppercase text-monarchSageDark tracking-wider flex items-center gap-1.5">
             <span data-i18n="sec_optional_docs">2. Optional Top-Up Documents (Unlock Additional Assistance)</span>
-            <span class="text-[10px] bg-amber-100 text-amber-900 px-2 py-0.5 rounded-full font-bold border border-amber-300" data-i18n="badge_boost">Boost Benefit</span>
+            <span
+              class="text-[10px] bg-amber-100 text-amber-900 px-2 py-0.5 rounded-full font-bold border border-amber-300"
+              data-i18n="badge_boost">Boost Benefit</span>
           </h3>
-          <span class="text-[11px] text-monarchEspressoLight font-semibold" data-i18n="badge_non_mand">Non-Mandatory</span>
+          <span class="text-[11px] text-monarchEspressoLight font-semibold"
+            data-i18n="badge_non_mand">Non-Mandatory</span>
         </div>
-        <div class="divide-y divide-monarchSage/20 border-2 border-dashed border-monarchSage rounded-xl overflow-hidden bg-monarchBaseLight/50" id="optionalChecklistContainer">
+        <div
+          class="divide-y divide-monarchSage/20 border-2 border-dashed border-monarchSage rounded-xl overflow-hidden bg-monarchBaseLight/50"
+          id="optionalChecklistContainer">
           <!-- Injected via JS -->
         </div>
       </div>
 
       <!-- Action Navigation -->
       <div class="flex justify-between items-center pt-4">
-        <button onclick="goToStep(3)" class="px-4 py-2.5 rounded-lg border border-monarchSage text-monarchEspresso font-bold text-xs hover:bg-monarchBaseLight cursor-pointer">
+        <button onclick="goToStep(3)"
+          class="px-4 py-2.5 rounded-lg border border-monarchSage text-monarchEspresso font-bold text-xs hover:bg-monarchBaseLight cursor-pointer">
           <span data-i18n="btn_back_matches">← Back to Matched Schemes</span>
         </button>
-        <button onclick="goToStep(5)" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-monarchEspresso hover:bg-black text-monarchBase font-bold text-xs shadow-md cursor-pointer">
+        <button onclick="goToStep(5)"
+          class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-monarchEspresso hover:bg-black text-monarchBase font-bold text-xs shadow-md cursor-pointer">
           <span data-i18n="btn_proceed_apply">Proceed to Official Submission</span>
           <span class="text-amber-200">➔</span>
         </button>
@@ -539,50 +674,64 @@
 
     <!-- ================= STEP 5: OFFICIAL PORTALS & LEGAL DISCLAIMER ================= -->
     <section id="step-5" class="hidden space-y-6">
-      
+
       <!-- Official Links Card -->
       <div class="bg-monarchBaseCard border-2 border-monarchSage rounded-2xl p-6 sm:p-8 shadow-sm space-y-4">
         <div class="flex items-center gap-2 text-monarchSageDark text-xs font-black uppercase tracking-wider">
-          <svg class="w-4 h-4 text-monarchOchre" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+          <svg class="w-4 h-4 text-monarchOchre" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+          </svg>
           <span data-i18n="step5_handoff">Direct Gateway Handoff</span>
         </div>
-        <h2 class="text-2xl font-black text-monarchEspresso" data-i18n="step5_title">Apply via Official Statutory Gateways</h2>
+        <h2 class="text-2xl font-black text-monarchEspresso" data-i18n="step5_title">Apply via Official Statutory
+          Gateways</h2>
         <p class="text-xs text-monarchEspressoLight leading-relaxed font-medium" data-i18n="step5_desc">
-          Welfare benefit disbursement is administered exclusively through official government domains (.gov.in). YojanaSetu never requests OTPs or application processing fees.
+          Welfare benefit disbursement is administered exclusively through official government domains (.gov.in).
+          YojanaSetu never requests OTPs or application processing fees.
         </p>
 
         <!-- Gateway Cards Grid -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-3">
-          
-          <div class="border border-monarchSage rounded-xl p-4 bg-monarchBaseLight flex flex-col justify-between space-y-3">
+
+          <div
+            class="border border-monarchSage rounded-xl p-4 bg-monarchBaseLight flex flex-col justify-between space-y-3">
             <div>
               <span class="text-[10px] font-black uppercase text-monarchEspressoLight">Ministry of Social Justice</span>
               <h4 class="font-black text-monarchEspresso text-sm mt-0.5">National Scholarship Portal (NSP)</h4>
-              <p class="text-xs text-monarchEspressoLight mt-1">Pre-Matric, Post-Matric & Merit scholarships registration.</p>
+              <p class="text-xs text-monarchEspressoLight mt-1">Pre-Matric, Post-Matric & Merit scholarships
+                registration.</p>
             </div>
-            <a href="https://scholarships.gov.in" target="_blank" rel="noreferrer" class="py-2.5 px-3 rounded-lg bg-monarchEspresso hover:bg-black text-amber-200 text-xs font-black text-center flex items-center justify-center gap-1.5">
+            <a href="https://scholarships.gov.in" target="_blank" rel="noreferrer"
+              class="py-2.5 px-3 rounded-lg bg-monarchEspresso hover:bg-black text-amber-200 text-xs font-black text-center flex items-center justify-center gap-1.5">
               scholarships.gov.in ↗
             </a>
           </div>
 
-          <div class="border border-monarchSage rounded-xl p-4 bg-monarchBaseLight flex flex-col justify-between space-y-3">
+          <div
+            class="border border-monarchSage rounded-xl p-4 bg-monarchBaseLight flex flex-col justify-between space-y-3">
             <div>
               <span class="text-[10px] font-black uppercase text-monarchEspressoLight">Ministry of Agriculture</span>
               <h4 class="font-black text-monarchEspresso text-sm mt-0.5">PM-KISAN DBT Portal</h4>
-              <p class="text-xs text-monarchEspressoLight mt-1">Direct ₹6,000 agricultural income supplement verification.</p>
+              <p class="text-xs text-monarchEspressoLight mt-1">Direct ₹6,000 agricultural income supplement
+                verification.</p>
             </div>
-            <a href="https://pmkisan.gov.in" target="_blank" rel="noreferrer" class="py-2.5 px-3 rounded-lg bg-monarchEspresso hover:bg-black text-amber-200 text-xs font-black text-center flex items-center justify-center gap-1.5">
+            <a href="https://pmkisan.gov.in" target="_blank" rel="noreferrer"
+              class="py-2.5 px-3 rounded-lg bg-monarchEspresso hover:bg-black text-amber-200 text-xs font-black text-center flex items-center justify-center gap-1.5">
               pmkisan.gov.in ↗
             </a>
           </div>
 
-          <div class="border border-monarchSage rounded-xl p-4 bg-monarchBaseLight flex flex-col justify-between space-y-3">
+          <div
+            class="border border-monarchSage rounded-xl p-4 bg-monarchBaseLight flex flex-col justify-between space-y-3">
             <div>
-              <span class="text-[10px] font-black uppercase text-monarchEspressoLight">Ministry of Social Justice (DEPwD)</span>
+              <span class="text-[10px] font-black uppercase text-monarchEspressoLight">Ministry of Social Justice
+                (DEPwD)</span>
               <h4 class="font-black text-monarchEspresso text-sm mt-0.5">UDID Card / Swavlamban</h4>
-              <p class="text-xs text-monarchEspressoLight mt-1">Unique Disability ID & assistance grants registration portal.</p>
+              <p class="text-xs text-monarchEspressoLight mt-1">Unique Disability ID & assistance grants registration
+                portal.</p>
             </div>
-            <a href="https://swavlambancard.gov.in" target="_blank" rel="noreferrer" class="py-2.5 px-3 rounded-lg bg-monarchEspresso hover:bg-black text-amber-200 text-xs font-black text-center flex items-center justify-center gap-1.5">
+            <a href="https://swavlambancard.gov.in" target="_blank" rel="noreferrer"
+              class="py-2.5 px-3 rounded-lg bg-monarchEspresso hover:bg-black text-amber-200 text-xs font-black text-center flex items-center justify-center gap-1.5">
               swavlambancard.gov.in ↗
             </a>
           </div>
@@ -593,20 +742,28 @@
       <!-- STATUTORY LEGAL DISCLAIMER BANNER -->
       <div class="bg-monarchBaseCard border-2 border-monarchOchre rounded-2xl p-6 shadow-sm space-y-3">
         <div class="flex items-center gap-2 text-monarchOchre font-black text-sm uppercase tracking-wider">
-          <svg class="w-5 h-5 text-monarchOchre shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+          <svg class="w-5 h-5 text-monarchOchre shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
+            </path>
+          </svg>
           <span data-i18n="disclaimer_heading">Statutory Legal Notice & Advisory</span>
         </div>
         <p class="text-xs text-monarchEspresso font-medium leading-relaxed" data-i18n="disclaimer_p1">
-          <strong>Independent Civic Tech Platform:</strong> YojanaSetu is an independent, automated public-guidance AI system. It is not an official ministry authority of the Government of India or any State Administration.
+          <strong>Independent Civic Tech Platform:</strong> YojanaSetu is an independent, automated public-guidance AI
+          system. It is not an official ministry authority of the Government of India or any State Administration.
         </p>
         <p class="text-xs text-monarchEspresso font-medium leading-relaxed" data-i18n="disclaimer_p2">
-          <strong>No Guarantee of Sanction:</strong> Preliminary eligibility determinations and checklist guidance are indicative calculations derived from published Gazette operational manuals. Final approval and benefit disbursement remain solely under the statutory jurisdiction of authorized competent authorities.
+          <strong>No Guarantee of Sanction:</strong> Preliminary eligibility determinations and checklist guidance are
+          indicative calculations derived from published Gazette operational manuals. Final approval and benefit
+          disbursement remain solely under the statutory jurisdiction of authorized competent authorities.
         </p>
       </div>
 
       <!-- Restart Session -->
       <div class="flex justify-center pt-2">
-        <button onclick="goToStep(1)" class="px-6 py-3 rounded-xl border-2 border-monarchSage bg-monarchBaseCard hover:bg-monarchBaseLight text-monarchEspresso font-black text-xs shadow-xs cursor-pointer">
+        <button onclick="goToStep(1)"
+          class="px-6 py-3 rounded-xl border-2 border-monarchSage bg-monarchBaseCard hover:bg-monarchBaseLight text-monarchEspresso font-black text-xs shadow-xs cursor-pointer">
           <span data-i18n="btn_restart">↺ Start a New Welfare Assessment</span>
         </button>
       </div>
@@ -615,11 +772,13 @@
   </main>
 
   <!-- ================= MODAL: HOW TO GET THIS DOCUMENT ================= -->
-  <div id="docProcurementModal" class="fixed inset-0 z-50 bg-monarchEspresso/60 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+  <div id="docProcurementModal"
+    class="fixed inset-0 z-50 bg-monarchEspresso/60 backdrop-blur-xs flex items-center justify-center p-4 hidden">
     <div class="bg-monarchBaseCard border-2 border-monarchSage rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4">
       <div class="flex items-start justify-between border-b border-monarchSage/30 pb-3">
         <div>
-          <span class="text-[10px] font-black uppercase text-monarchOchre tracking-wider">Official Procurement Guide</span>
+          <span class="text-[10px] font-black uppercase text-monarchOchre tracking-wider">Official Procurement
+            Guide</span>
           <h3 class="text-base font-black text-monarchEspresso" id="procureModalDocName">Document Name</h3>
         </div>
         <button onclick="closeProcureModal()" class="text-monarchEspresso hover:text-black p-1 rounded-lg">✕</button>
@@ -627,7 +786,8 @@
 
       <div class="space-y-3 text-xs text-monarchEspresso">
         <div class="bg-monarchBaseLight p-3 rounded-xl border border-monarchSage/50 space-y-1">
-          <span class="font-extrabold text-monarchSageDark block uppercase tracking-wider text-[10px]">Where to Obtain / Issuing Authority</span>
+          <span class="font-extrabold text-monarchSageDark block uppercase tracking-wider text-[10px]">Where to Obtain /
+            Issuing Authority</span>
           <p id="procureModalAuthority" class="font-bold">Tehsil Office / CSC Center</p>
         </div>
 
@@ -651,7 +811,8 @@
       </div>
 
       <div class="pt-2 flex justify-end">
-        <button onclick="closeProcureModal()" class="px-5 py-2 rounded-xl bg-monarchEspresso hover:bg-black text-white text-xs font-bold">
+        <button onclick="closeProcureModal()"
+          class="px-5 py-2 rounded-xl bg-monarchEspresso hover:bg-black text-white text-xs font-bold">
           Understood
         </button>
       </div>
@@ -659,14 +820,18 @@
   </div>
 
   <!-- ================= MODAL: SCHEME COMPARISON ================= -->
-  <div id="comparisonModal" class="fixed inset-0 z-50 bg-monarchEspresso/60 backdrop-blur-xs flex items-center justify-center p-4 hidden">
-    <div class="bg-monarchBaseCard border-2 border-monarchSage rounded-2xl max-w-4xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+  <div id="comparisonModal"
+    class="fixed inset-0 z-50 bg-monarchEspresso/60 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+    <div
+      class="bg-monarchBaseCard border-2 border-monarchSage rounded-2xl max-w-4xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
       <div class="flex items-start justify-between border-b border-monarchSage/30 pb-3">
         <div>
-          <span class="text-[10px] font-black uppercase text-monarchOchre tracking-wider">Comparative Benefit Matrix</span>
+          <span class="text-[10px] font-black uppercase text-monarchOchre tracking-wider">Comparative Benefit
+            Matrix</span>
           <h3 class="text-lg font-black text-monarchEspresso">Scheme Comparison Ranked by Estimated Benefit Value</h3>
         </div>
-        <button onclick="closeComparisonModal()" class="text-monarchEspresso hover:text-black p-1 text-sm font-bold">✕ Close</button>
+        <button onclick="closeComparisonModal()" class="text-monarchEspresso hover:text-black p-1 text-sm font-bold">✕
+          Close</button>
       </div>
 
       <div class="overflow-x-auto">
@@ -687,7 +852,8 @@
       </div>
 
       <div class="pt-2 flex justify-end">
-        <button onclick="closeComparisonModal()" class="px-5 py-2 rounded-xl bg-monarchEspresso hover:bg-black text-white text-xs font-bold">
+        <button onclick="closeComparisonModal()"
+          class="px-5 py-2 rounded-xl bg-monarchEspresso hover:bg-black text-white text-xs font-bold">
           Close Comparison
         </button>
       </div>
@@ -697,63 +863,86 @@
   <!-- ================= FLOATING AI CHAT ASSISTANT (ASK AI) ================= -->
   <!-- Floating Action Button -->
   <div class="fixed bottom-6 right-6 z-50">
-    <button onclick="toggleChat(true)" class="relative p-4 rounded-full bg-monarchEspresso text-white shadow-2xl hover:bg-black transition-transform active:scale-95 flex items-center justify-center cursor-pointer border-2 border-amber-200/40 group" aria-label="Open AI Welfare Assistant">
+    <button onclick="toggleChat(true)"
+      class="relative p-4 rounded-full bg-monarchEspresso text-white shadow-2xl hover:bg-black transition-transform active:scale-95 flex items-center justify-center cursor-pointer border-2 border-amber-200/40 group"
+      aria-label="Open AI Welfare Assistant">
       <span class="absolute -top-1 -right-1 flex h-4 w-4">
         <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-monarchOchre opacity-75"></span>
         <span class="relative inline-flex rounded-full h-4 w-4 bg-monarchOchre border-2 border-white"></span>
       </span>
       <svg class="w-6 h-6 text-amber-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z">
+        </path>
       </svg>
     </button>
   </div>
 
   <!-- Slide-Out Chat Drawer -->
-  <div id="aiChatDrawer" class="fixed inset-y-0 right-0 w-full sm:w-96 bg-monarchBaseCard border-l-2 border-monarchSage shadow-2xl z-50 transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col">
-    
+  <div id="aiChatDrawer"
+    class="fixed inset-y-0 right-0 w-full sm:w-96 bg-monarchBaseCard border-l-2 border-monarchSage shadow-2xl z-50 transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col">
+
     <!-- Drawer Header -->
-    <div class="p-4 bg-monarchEspresso text-monarchBase flex items-center justify-between border-b border-monarchSage/40">
+    <div
+      class="p-4 bg-monarchEspresso text-monarchBase flex items-center justify-between border-b border-monarchSage/40">
       <div class="flex items-center gap-2.5">
         <div class="w-8 h-8 rounded-lg bg-monarchSageDark flex items-center justify-center text-amber-200 font-black">
           ✨
         </div>
         <div>
           <h3 class="text-xs font-black text-white" data-i18n="chat_drawer_title">Ask AI Scheme Assistant</h3>
-          <p class="text-[10px] text-amber-200 font-medium" data-i18n="chat_drawer_sub">Grounded in Verified Operational Manuals</p>
+          <p class="text-[10px] text-amber-200 font-medium" data-i18n="chat_drawer_sub">Grounded in Verified Operational
+            Manuals</p>
         </div>
       </div>
-      <button onclick="toggleChat(false)" class="p-1 rounded-lg text-monarchBaseLight hover:text-white hover:bg-white/10 cursor-pointer">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+      <button onclick="toggleChat(false)"
+        class="p-1 rounded-lg text-monarchBaseLight hover:text-white hover:bg-white/10 cursor-pointer">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
       </button>
     </div>
 
     <!-- Quick Prompt Chips -->
-    <div class="p-2.5 bg-monarchBase border-b border-monarchSage/40 flex gap-1.5 overflow-x-auto" id="chatChipsContainer">
+    <div class="p-2.5 bg-monarchBase border-b border-monarchSage/40 flex gap-1.5 overflow-x-auto"
+      id="chatChipsContainer">
       <!-- Injected via JS based on selected language -->
     </div>
 
     <!-- Chat Messages Stream -->
     <div id="chatMessageStream" class="flex-1 p-4 overflow-y-auto space-y-3 bg-monarchBaseLight text-xs">
       <div class="flex justify-start">
-        <div class="max-w-[85%] rounded-2xl p-3 bg-white text-monarchEspresso border border-monarchSage/50 shadow-2xs leading-relaxed" id="chatWelcomeMessage">
-          Namaste! I am your <strong>YojanaSetu AI Assistant</strong>. Ask me anything about scheme rules, required documents, or official application portals.
+        <div
+          class="max-w-[85%] rounded-2xl p-3 bg-white text-monarchEspresso border border-monarchSage/50 shadow-2xs leading-relaxed"
+          id="chatWelcomeMessage">
+          Namaste! I am your <strong>YojanaSetu AI Assistant</strong>. Ask me anything about scheme rules, required
+          documents, or official application portals.
         </div>
       </div>
     </div>
 
     <!-- Chat Input Form -->
-    <form onsubmit="handleChatSubmit(event)" class="p-3 bg-monarchBaseCard border-t border-monarchSage/40 flex items-center gap-2">
-      <input type="text" id="chatInputField" placeholder="Ask about eligibility, documents, rules..." class="flex-1 bg-white border border-monarchSage rounded-xl px-3.5 py-2 text-xs font-semibold text-monarchEspresso focus:outline-none focus:ring-1 focus:ring-monarchOchre" />
-      <button id="chatSendButton" type="submit" class="p-2 rounded-xl bg-monarchOchre text-white hover:bg-monarchOchreHover transition-colors cursor-pointer">
-        <svg class="w-4 h-4 text-amber-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
+    <form onsubmit="handleChatSubmit(event)"
+      class="p-3 bg-monarchBaseCard border-t border-monarchSage/40 flex items-center gap-2">
+      <input type="text" id="chatInputField" placeholder="Ask about eligibility, documents, rules..."
+        class="flex-1 bg-white border border-monarchSage rounded-xl px-3.5 py-2 text-xs font-semibold text-monarchEspresso focus:outline-none focus:ring-1 focus:ring-monarchOchre" />
+      <button id="chatSendButton" type="submit"
+        class="p-2 rounded-xl bg-monarchOchre text-white hover:bg-monarchOchreHover transition-colors cursor-pointer">
+        <svg class="w-4 h-4 text-amber-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8">
+          </path>
+        </svg>
       </button>
     </form>
   </div>
 
   <!-- Civic Footer -->
-  <footer class="mt-auto border-t border-monarchSage/40 bg-monarchBaseCard py-6 text-center text-xs text-monarchEspressoLight space-y-1">
-    <p class="font-extrabold text-monarchEspresso" data-i18n="footer_title">YojanaSetu • Civic Public Interest Technology</p>
-    <p class="text-[11px] text-monarchEspressoLight" data-i18n="footer_sub">DPDP Act compliant. All records grounded in verified Central & State Government sources.</p>
+  <footer
+    class="mt-auto border-t border-monarchSage/40 bg-monarchBaseCard py-6 text-center text-xs text-monarchEspressoLight space-y-1">
+    <p class="font-extrabold text-monarchEspresso" data-i18n="footer_title">YojanaSetu • Civic Public Interest
+      Technology</p>
+    <p class="text-[11px] text-monarchEspressoLight" data-i18n="footer_sub">DPDP Act compliant. All records grounded in
+      verified Central & State Government sources.</p>
   </footer>
 
   <!-- ================= INTEGRATED REAL BACKEND JAVASCRIPT CLIENT ================= -->
@@ -772,8 +961,8 @@
     localStorage.setItem('yojanasetu_session', sessionToken);
 
     // API Base URL (auto-detects local host vs relative path)
-    const API_BASE = window.location.protocol.startsWith('http') 
-      ? (window.location.origin.includes(':8000') ? '/api' : 'http://localhost:8000/api') 
+    const API_BASE = window.location.protocol.startsWith('http')
+      ? (window.location.origin.includes(':8000') ? '/api' : 'http://localhost:8000/api')
       : 'http://localhost:8000/api';
 
     // 14 Supported Languages with native names & RTL markers
@@ -856,10 +1045,9 @@
       container.innerHTML = LANGUAGES.map(lang => {
         const isSelected = selectedLanguage === lang.code;
         return `
-          <button type="button" onclick="changeLanguage('${lang.code}')" class="p-3.5 rounded-xl text-left border-2 transition-all flex flex-col justify-between cursor-pointer ${
-            isSelected 
-              ? 'border-monarchOchre bg-monarchSageLight/40 shadow-xs' 
-              : 'border-monarchSage/50 hover:border-monarchSage bg-white'
+          <button type="button" onclick="changeLanguage('${lang.code}')" class="p-3.5 rounded-xl text-left border-2 transition-all flex flex-col justify-between cursor-pointer ${isSelected
+            ? 'border-monarchOchre bg-monarchSageLight/40 shadow-xs'
+            : 'border-monarchSage/50 hover:border-monarchSage bg-white'
           }">
             <div class="flex justify-between items-center mb-1">
               <span class="text-sm font-black text-monarchEspresso">${lang.native}</span>
@@ -986,7 +1174,7 @@
 
         const data = await response.json();
         evaluatedSchemes = data.schemes || [];
-        
+
         // Update summary text
         document.getElementById('resultsSummaryChip').textContent = data.summary_chip;
         document.getElementById('activeCountBadge').textContent = data.total_active;
@@ -1068,8 +1256,19 @@
       }
 
       container.innerHTML = list.map((scheme, rankIdx) => {
-        const evalState = scheme.evaluation;
-        
+        const evalState = scheme.evaluation || {
+          status: 'needs_verification',
+          satisfied_conditions: [],
+          violated_conditions: [],
+          missing_facts: []
+        };
+        const schemeName = scheme.name || scheme.localized_name || scheme.official_name || 'Civic Scheme';
+        const benefitVal = typeof scheme.numeric_benefit_value === 'number' ? scheme.numeric_benefit_value : 0;
+        const benefitSummary = scheme.benefit_summary || `Up to ₹${benefitVal.toLocaleString('en-IN')}`;
+        const docs = scheme.documents || [];
+        const mandatoryCount = docs.filter(d => d.is_mandatory).length || (scheme.mandatory_docs_count || 0);
+        const optionalCount = docs.filter(d => !d.is_mandatory).length || Math.max(0, (scheme.documents_count || 0) - mandatoryCount);
+
         let statusBadgeHtml = '';
         if (scheme.is_retired) {
           statusBadgeHtml = `<span class="px-2.5 py-0.5 rounded-md bg-stone-500 text-white text-xs font-black">Archived / Sunset</span>`;
@@ -1082,7 +1281,8 @@
         }
 
         if (scheme.is_retired) {
-          const ret = scheme.retired_details || {};
+          const reason = scheme.retired_reason || (scheme.retired_details && scheme.retired_details.reason) || 'Consolidated under modernized guidelines.';
+          const replacementSlug = scheme.replacement_scheme_slug || (scheme.retired_details && scheme.retired_details.replacementSchemeId) || 'pm-surya';
           return `
             <div class="bg-monarchBaseLight border-2 border-dashed border-monarchSage rounded-2xl p-6 shadow-xs opacity-90 space-y-4">
               <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
@@ -1090,20 +1290,20 @@
                   <div class="flex items-center gap-2 mb-1.5 flex-wrap">
                     ${statusBadgeHtml}
                     <span class="px-2.5 py-0.5 rounded-md bg-stone-200 text-stone-700 text-xs font-bold">
-                      ${escapeHtml(scheme.category_label)}
+                      ${escapeHtml(scheme.category_label || 'Archived Program')}
                     </span>
                   </div>
-                  <h3 class="text-lg font-black text-stone-800">${escapeHtml(scheme.name)}</h3>
-                  <p class="text-xs text-stone-500 font-bold">${escapeHtml(scheme.ministry)}</p>
+                  <h3 class="text-lg font-black text-stone-800">${escapeHtml(schemeName)}</h3>
+                  <p class="text-xs text-stone-500 font-bold">${escapeHtml(scheme.ministry || '')}</p>
                 </div>
               </div>
 
               <div class="bg-stone-100 border border-stone-300 rounded-xl p-3.5 space-y-2 text-xs">
                 <span class="font-black text-stone-800 block">⚠️ Why This Scheme Was Retired:</span>
-                <p class="text-stone-700 font-medium">${escapeHtml(ret.reason || 'Consolidated under modernized guidelines.')}</p>
+                <p class="text-stone-700 font-medium">${escapeHtml(reason)}</p>
                 <div class="pt-2 flex items-center justify-between border-t border-stone-200 mt-2">
                   <span class="font-bold text-stone-600">Active Modern Replacement:</span>
-                  <button onclick="toggleSchemeStatusView(false); openChecklist('${ret.replacementSchemeId}')" class="text-xs font-black text-monarchOchre hover:underline cursor-pointer">
+                  <button onclick="toggleSchemeStatusView(false); openChecklist('${replacementSlug}')" class="text-xs font-black text-monarchOchre hover:underline cursor-pointer">
                     View Replacement Scheme ➔
                   </button>
                 </div>
@@ -1125,16 +1325,16 @@
                     Rank #${rankIdx + 1}
                   </span>
                   <span class="px-2.5 py-0.5 rounded-md bg-monarchSageLight text-monarchEspresso text-xs font-bold border border-monarchSage">
-                    ${escapeHtml(scheme.category_label)}
+                    ${escapeHtml(scheme.category_label || scheme.category)}
                   </span>
                 </div>
-                <h3 class="text-lg font-black text-monarchEspresso">${escapeHtml(scheme.name)}</h3>
-                <p class="text-xs text-monarchEspressoLight font-bold">${escapeHtml(scheme.ministry)}</p>
+                <h3 class="text-lg font-black text-monarchEspresso">${escapeHtml(schemeName)}</h3>
+                <p class="text-xs text-monarchEspressoLight font-bold">${escapeHtml(scheme.ministry || '')}</p>
               </div>
               <div class="sm:text-right shrink-0">
                 <span class="text-[10px] uppercase font-black text-monarchOchre tracking-wider block">Estimated Benefit Value</span>
                 <span class="text-xs font-black text-monarchEspresso bg-monarchSageLight border border-monarchSage px-2.5 py-1 rounded-lg inline-block mt-0.5">
-                  ₹${scheme.numeric_benefit_value.toLocaleString('en-IN')} (${escapeHtml(scheme.benefit_summary)})
+                  ₹${benefitVal.toLocaleString('en-IN')} (${escapeHtml(benefitSummary)})
                 </span>
               </div>
             </div>
@@ -1146,7 +1346,7 @@
                   <span class="text-emerald-700">✓</span> Conditions Satisfied:
                 </span>
                 <ul class="space-y-1.5 text-xs text-emerald-950 font-medium">
-                  ${evalState.satisfied_conditions.length > 0 
+                  ${(evalState.satisfied_conditions && evalState.satisfied_conditions.length > 0)
                     ? evalState.satisfied_conditions.map(q => `<li class="flex items-start gap-1.5"><span class="text-emerald-700 font-black">•</span> <span>${escapeHtml(q)}</span></li>`).join('')
                     : `<li class="text-slate-500 italic">No specific conditions recorded as met yet.</li>`
                   }
@@ -1158,8 +1358,8 @@
                   <span class="text-amber-700">⚠️</span> Missing Facts / Disqualification Notes:
                 </span>
                 <ul class="space-y-1.5 text-xs text-amber-950 font-medium">
-                  ${evalState.violated_conditions.concat(evalState.missing_facts).length > 0
-                    ? evalState.violated_conditions.concat(evalState.missing_facts).map(dq => `<li class="flex items-start gap-1.5"><span class="text-amber-700 font-black">ℹ</span> <span>${escapeHtml(dq)}</span></li>`).join('')
+                  ${((evalState.violated_conditions || []).concat(evalState.missing_facts || [])).length > 0
+                    ? (evalState.violated_conditions || []).concat(evalState.missing_facts || []).map(dq => `<li class="flex items-start gap-1.5"><span class="text-amber-700 font-black">ℹ</span> <span>${escapeHtml(dq)}</span></li>`).join('')
                     : `<li class="text-emerald-800 font-semibold">✓ No disqualifying criteria detected in profile.</li>`
                   }
                 </ul>
@@ -1170,17 +1370,17 @@
             <div class="bg-monarchBaseLight/60 p-2.5 rounded-xl border border-monarchSage/40 flex flex-wrap items-center justify-between text-[11px] text-monarchEspresso">
               <span><strong>Source:</strong> ${escapeHtml(sourceName)}</span>
               <span class="font-bold px-2 py-0.5 rounded-full ${scheme.verification_status === 'verified' ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : 'bg-amber-100 text-amber-800 border border-amber-300'}">
-                ${sourceStatus} • Verified: ${scheme.last_verified_at || 'Pending'}
+                ${sourceStatus} • Verified: ${scheme.last_verified_at || 'Statutory Record'}
               </span>
             </div>
 
             <!-- Card Action Strip -->
             <div class="pt-2 flex flex-wrap items-center justify-between gap-3 border-t border-monarchSage/30">
               <button onclick="openChecklist('${scheme.slug}')" class="text-xs font-black text-monarchOchre hover:text-monarchOchreHover flex items-center gap-1 cursor-pointer">
-                📄 Prepare Certificates (${scheme.documents.filter(d=>d.is_mandatory).length} Mandatory + ${scheme.documents.filter(d=>!d.is_mandatory).length} Top-Up) ➔
+                📄 Prepare Certificates (${mandatoryCount} Mandatory + ${optionalCount} Top-Up) ➔
               </button>
               <div class="flex items-center gap-2">
-                <button onclick="askAIAboutScheme('${scheme.slug}', '${scheme.name.replace(/'/g, "\\'")}')" class="px-3 py-1.5 rounded-lg border border-monarchSage hover:bg-monarchBaseLight text-monarchEspresso text-xs font-bold cursor-pointer">
+                <button onclick="askAIAboutScheme('${scheme.slug}', '${escapeHtml(schemeName).replace(/'/g, "\\'")}')" class="px-3 py-1.5 rounded-lg border border-monarchSage hover:bg-monarchBaseLight text-monarchEspresso text-xs font-bold cursor-pointer">
                   Ask AI Guidance
                 </button>
                 <a href="${scheme.external_portal_url || 'https://india.gov.in'}" target="_blank" rel="noreferrer" class="px-3.5 py-1.5 rounded-lg bg-monarchEspresso hover:bg-black text-amber-200 text-xs font-black cursor-pointer inline-flex items-center gap-1">
@@ -1197,21 +1397,26 @@
     function openComparisonModal() {
       const modal = document.getElementById('comparisonModal');
       const tbody = document.getElementById('comparisonTableBody');
-      const activeList = [...evaluatedSchemes.filter(s => !s.is_retired)].sort((a, b) => b.numeric_benefit_value - a.numeric_benefit_value);
+      const activeList = [...evaluatedSchemes.filter(s => !s.is_retired)].sort((a, b) => (b.numeric_benefit_value || 0) - (a.numeric_benefit_value || 0));
 
       tbody.innerHTML = activeList.map((scheme, idx) => {
+        const evalState = scheme.evaluation || {};
         let statusText = 'Preliminary Match';
-        if (scheme.evaluation.status === 'does_not_match') statusText = 'Ineligible';
-        if (scheme.evaluation.status === 'needs_verification') statusText = 'Needs Verification';
+        if (evalState.status === 'does_not_match') statusText = 'Ineligible';
+        if (evalState.status === 'needs_verification') statusText = 'Needs Verification';
+
+        const schemeName = scheme.name || scheme.localized_name || scheme.official_name || 'Scheme';
+        const benefitVal = typeof scheme.numeric_benefit_value === 'number' ? scheme.numeric_benefit_value : 0;
+        const benefitSummary = scheme.benefit_summary || `Up to ₹${benefitVal.toLocaleString('en-IN')}`;
 
         return `
           <tr class="hover:bg-monarchBaseLight/50">
             <td class="p-3 font-bold text-monarchEspresso">
-              <span class="text-monarchOchre font-black mr-1">#${idx + 1}</span> ${escapeHtml(scheme.name)}
+              <span class="text-monarchOchre font-black mr-1">#${idx + 1}</span> ${escapeHtml(schemeName)}
             </td>
-            <td class="p-3 text-slate-600 font-medium">${escapeHtml(scheme.category_label)}</td>
-            <td class="p-3 font-black text-monarchOchre">₹${scheme.numeric_benefit_value.toLocaleString('en-IN')} <span class="text-[10px] text-slate-500 font-normal">(${escapeHtml(scheme.benefit_summary)})</span></td>
-            <td class="p-3 font-extrabold ${scheme.evaluation.status === 'potential_match' ? 'text-emerald-700' : 'text-amber-700'}">${statusText}</td>
+            <td class="p-3 text-slate-600 font-medium">${escapeHtml(scheme.category_label || scheme.category)}</td>
+            <td class="p-3 font-black text-monarchOchre">₹${benefitVal.toLocaleString('en-IN')} <span class="text-[10px] text-slate-500 font-normal">(${escapeHtml(benefitSummary)})</span></td>
+            <td class="p-3 font-extrabold ${evalState.status === 'potential_match' ? 'text-emerald-700' : 'text-amber-700'}">${statusText}</td>
             <td class="p-3">
               <button onclick="closeComparisonModal(); openChecklist('${scheme.slug}');" class="px-2.5 py-1 rounded bg-monarchSageLight text-monarchEspresso font-bold hover:bg-monarchSage text-[11px] cursor-pointer">
                 Review Docs
@@ -1229,8 +1434,29 @@
     }
 
     // --- Checklist Functions (Step 4) ---
-    function openChecklist(schemeSlug) {
+    async function openChecklist(schemeSlug) {
       activeChecklistSchemeSlug = schemeSlug;
+      let scheme = evaluatedSchemes.find(s => s.slug === schemeSlug);
+      // Fetch fresh checklist from backend for accurate documents
+      try {
+        const res = await fetch(`${API_BASE}/schemes/${schemeSlug}/checklist?lang=${selectedLanguage}`);
+        if (res.ok) {
+          const chkData = await res.json();
+          if (!scheme) {
+            scheme = {
+              slug: schemeSlug,
+              name: chkData.scheme_name,
+              documents: [...(chkData.mandatory_documents || []), ...(chkData.optional_documents || [])],
+              is_retired: false
+            };
+            evaluatedSchemes.push(scheme);
+          } else {
+            scheme.documents = [...(chkData.mandatory_documents || []), ...(chkData.optional_documents || [])];
+          }
+        }
+      } catch (err) {
+        console.warn("Could not fetch remote checklist", err);
+      }
       goToStep(4);
     }
 
@@ -1238,18 +1464,19 @@
       const scheme = evaluatedSchemes.find(s => s.slug === activeChecklistSchemeSlug) || evaluatedSchemes[0];
       if (!scheme) return;
 
-      document.getElementById('checklistHeaderTitle').textContent = `Checklist: ${scheme.name}`;
+      const schemeName = scheme.name || scheme.localized_name || scheme.official_name || 'Scheme';
+      document.getElementById('checklistHeaderTitle').textContent = `Checklist: ${schemeName}`;
 
       // Tab pills
       const pillsContainer = document.getElementById('checklistSchemePills');
       pillsContainer.innerHTML = evaluatedSchemes.filter(s => !s.is_retired).map(s => `
-        <button onclick="openChecklist('${s.slug}')" class="px-2.5 py-1 rounded-lg cursor-pointer ${
-          s.slug === scheme.slug ? 'bg-monarchEspresso text-amber-200 shadow-xs' : 'text-monarchEspresso hover:text-black'
-        }">${s.slug.toUpperCase()}</button>
+        <button onclick="openChecklist('${s.slug}')" class="px-2.5 py-1 rounded-lg cursor-pointer ${s.slug === scheme.slug ? 'bg-monarchEspresso text-amber-200 shadow-xs' : 'text-monarchEspresso hover:text-black'
+        }">${escapeHtml(s.slug.toUpperCase())}</button>
       `).join('');
 
-      const mandatoryDocs = scheme.documents.filter(d => d.is_mandatory);
-      const optionalDocs = scheme.documents.filter(d => !d.is_mandatory);
+      const docs = scheme.documents || [];
+      const mandatoryDocs = docs.filter(d => d.is_mandatory);
+      const optionalDocs = docs.filter(d => !d.is_mandatory);
 
       const totalMandatory = mandatoryDocs.length;
       const readyMandatory = mandatoryDocs.filter(d => d.ready).length;
@@ -1263,8 +1490,7 @@
       const mandatoryContainer = document.getElementById('mandatoryChecklistContainer');
       mandatoryContainer.innerHTML = mandatoryDocs.map((doc, idx) => {
         return `
-          <div onclick="toggleDocReady('${scheme.slug}', ${doc.id})" class="p-4 flex items-center justify-between cursor-pointer transition-colors ${
-            doc.ready ? 'bg-monarchSageLight/40' : 'hover:bg-monarchBaseLight'
+          <div onclick="toggleDocReady('${scheme.slug}', ${doc.id})" class="p-4 flex items-center justify-between cursor-pointer transition-colors ${doc.ready ? 'bg-monarchSageLight/40' : 'hover:bg-monarchBaseLight'
           }">
             <div class="flex items-center gap-3">
               <input type="checkbox" ${doc.ready ? 'checked' : ''} class="w-4 h-4 rounded text-monarchOchre cursor-pointer" onclick="event.stopPropagation(); toggleDocReady('${scheme.slug}', ${doc.id})" />
@@ -1292,8 +1518,7 @@
       } else {
         optionalContainer.innerHTML = optionalDocs.map((doc) => {
           return `
-            <div onclick="toggleDocReady('${scheme.slug}', ${doc.id})" class="p-4 flex items-center justify-between cursor-pointer transition-colors ${
-              doc.ready ? 'bg-amber-100/50' : 'hover:bg-monarchBaseLight'
+            <div onclick="toggleDocReady('${scheme.slug}', ${doc.id})" class="p-4 flex items-center justify-between cursor-pointer transition-colors ${doc.ready ? 'bg-amber-100/50' : 'hover:bg-monarchBaseLight'
             }">
               <div class="flex items-center gap-3">
                 <input type="checkbox" ${doc.ready ? 'checked' : ''} class="w-4 h-4 rounded text-monarchOchre cursor-pointer" onclick="event.stopPropagation(); toggleDocReady('${scheme.slug}', ${doc.id})" />
@@ -1369,15 +1594,14 @@
       const container = document.getElementById('chatMessageStream');
       const msgDiv = document.createElement('div');
       msgDiv.className = `flex ${isUser ? 'justify-end' : 'justify-start'}`;
-      
+
       const bubble = document.createElement('div');
-      bubble.className = `max-w-[85%] rounded-2xl p-3 leading-relaxed text-xs ${
-        isUser 
-          ? 'bg-monarchEspresso text-amber-100 rounded-br-xs' 
+      bubble.className = `max-w-[85%] rounded-2xl p-3 leading-relaxed text-xs ${isUser
+          ? 'bg-monarchEspresso text-amber-100 rounded-br-xs'
           : 'bg-white text-monarchEspresso border border-monarchSage/50 shadow-2xs rounded-bl-xs'
-      }`;
+        }`;
       bubble.textContent = text;
-      
+
       msgDiv.appendChild(bubble);
       container.appendChild(msgDiv);
       container.scrollTop = container.scrollHeight;
@@ -1461,14 +1685,18 @@
           // Transform into evaluatedSchemes format for initial display
           evaluatedSchemes = list.map(s => ({
             ...s,
+            name: s.name || s.localized_name || s.official_name,
+            benefit_summary: s.benefit_summary || `Up to ₹${(s.numeric_benefit_value || 0).toLocaleString('en-IN')}`,
+            documents: s.documents || [],
+            mandatory_docs_count: s.mandatory_docs_count || 0,
+            documents_count: s.documents_count || 0,
             evaluation: {
               status: s.is_retired ? 'does_not_match' : 'needs_verification',
               status_label: s.is_retired ? 'Archived' : 'Complete Step 2 Assessment',
               satisfied_conditions: s.why_qualify || [],
               violated_conditions: s.why_not_qualify || [],
               missing_facts: ["Fill assessment form in Step 2 to compute preliminary eligibility."]
-            },
-            documents: []
+            }
           }));
         }
       } catch (e) {
@@ -1477,4 +1705,5 @@
     });
   </script>
 </body>
+
 </html>
