@@ -1,0 +1,1610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YojanaMitra (SchemeAI) – National Civic Welfare Discovery Portal</title>
+  
+  <!-- Modern Typography (Plus Jakarta Sans) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            monarchBase: '#EEE9C1',        // Soft Warm Cream (Base)
+            monarchBaseLight: '#F7F5E4',   // Very light cream for cards
+            monarchBaseCard: '#FAF8EB',    // Crisp light background
+            monarchSage: '#8DA28C',        // Muted Sage Green
+            monarchSageDark: '#667B65',    // Darker Sage for borders/headers
+            monarchSageLight: '#D8E2D7',   // Light Sage tint
+            monarchOchre: '#A4530C',       // Rust Amber / Ochre CTA & Badges
+            monarchOchreHover: '#874207',  // Deep Ochre
+            monarchEspresso: '#3A230A',    // Deep Dark Chocolate / Text
+            monarchEspressoLight: '#593914'// Muted Espresso for subtexts
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #EEE9C1;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #8DA28C;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #667B65;
+    }
+    /* Pulse badge */
+    @keyframes subtle-pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.06); opacity: 0.85; }
+    }
+    .pulse-glow {
+      animation: subtle-pulse 2.2s infinite ease-in-out;
+    }
+  </style>
+</head>
+
+<body class="bg-monarchBase text-monarchEspresso font-sans antialiased min-h-screen flex flex-col selection:bg-monarchSageLight selection:text-monarchEspresso">
+
+  <!-- Civic Emblem Tricolor Top Ribbon -->
+  <div class="h-1.5 w-full bg-gradient-to-r from-monarchOchre via-monarchBase to-monarchSage border-b border-monarchSage/40"></div>
+
+  <!-- Civic Header Navigation Bar -->
+  <header class="sticky top-0 z-40 bg-monarchBaseCard/95 backdrop-blur-md border-b border-monarchSage/40 shadow-xs">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-18 flex items-center justify-between">
+      
+      <!-- Brand & Emblem -->
+      <div class="flex items-center gap-3 cursor-pointer" onclick="goToStep(1)">
+        <div class="w-11 h-11 rounded-xl bg-monarchEspresso flex items-center justify-center text-amber-200 font-extrabold shadow-md border border-monarchSage">
+          <svg class="w-6 h-6 text-amber-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+          </svg>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-extrabold text-monarchEspresso text-xl tracking-tight">YojanaMitra</span>
+            <span class="text-[10px] font-black px-2 py-0.5 rounded-full bg-monarchSage/30 text-monarchEspresso border border-monarchSage">
+              योजनामित्र AI
+            </span>
+          </div>
+          <p class="text-[11px] text-monarchEspressoLight font-medium">National Civic Welfare & Subsidy Engine</p>
+        </div>
+      </div>
+
+      <!-- Navigation Steps Indicator (Desktop) & Language -->
+      <div class="flex items-center gap-3 sm:gap-4">
+        <nav class="hidden lg:flex items-center gap-1 bg-monarchBaseLight px-3 py-1.5 rounded-full border border-monarchSage/50 text-xs font-semibold text-monarchEspresso">
+          <span id="nav-pill-1" class="px-2.5 py-1 rounded-full bg-monarchEspresso text-monarchBase font-bold transition-all">1. Language</span>
+          <span class="text-monarchSage">›</span>
+          <span id="nav-pill-2" class="px-2.5 py-1 rounded-full text-monarchEspressoLight transition-all">2. Assessment</span>
+          <span class="text-monarchSage">›</span>
+          <span id="nav-pill-3" class="px-2.5 py-1 rounded-full text-monarchEspressoLight transition-all">3. Matches</span>
+          <span class="text-monarchSage">›</span>
+          <span id="nav-pill-4" class="px-2.5 py-1 rounded-full text-monarchEspressoLight transition-all">4. Documents</span>
+          <span class="text-monarchSage">›</span>
+          <span id="nav-pill-5" class="px-2.5 py-1 rounded-full text-monarchEspressoLight transition-all">5. Official Links</span>
+        </nav>
+
+        <!-- Global Language Selector -->
+        <div class="flex items-center gap-1.5 bg-monarchBaseCard border-2 border-monarchSage/60 rounded-xl px-2.5 py-1.5 text-xs font-bold shadow-xs">
+          <svg class="w-4 h-4 text-monarchOchre" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path>
+          </svg>
+          <select id="headerLangSelect" onchange="changeLanguage(this.value)" class="bg-transparent focus:outline-none cursor-pointer text-monarchEspresso font-bold">
+            <option value="en">English</option>
+            <option value="hi">हिन्दी (Hindi)</option>
+            <option value="mr">मराठी (Marathi)</option>
+            <option value="ta">தமிழ் (Tamil)</option>
+            <option value="te">తెలుగు (Telugu)</option>
+            <option value="bn">বাংলা (Bengali)</option>
+          </select>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Main Multi-Step Stage -->
+  <main class="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 py-8">
+
+    <!-- ================= STEP 1: WELCOME & LANGUAGE SELECTION ================= -->
+    <section id="step-1" class="space-y-8">
+      <div class="text-center max-w-2xl mx-auto pt-6 space-y-4">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-monarchSageLight border border-monarchSage text-monarchEspresso text-xs font-bold">
+          <span class="w-2 h-2 rounded-full bg-monarchOchre pulse-glow"></span>
+          Intelligent Civic Welfare Navigation System
+        </div>
+        <h1 class="text-3xl sm:text-5xl font-black text-monarchEspresso tracking-tight leading-tight">
+          Government Welfare, Tailored to Your Identity.
+        </h1>
+        <p class="text-monarchEspressoLight text-base sm:text-lg leading-relaxed font-medium">
+          Eliminate bureaucratic confusion and endless paperwork. YojanaMitra analyzes your socio-economic background, location, and educational profile to match you with valid State and Central schemes in seconds.
+        </p>
+      </div>
+
+      <!-- Language Cards Grid -->
+      <div class="bg-monarchBaseCard border-2 border-monarchSage rounded-2xl p-6 sm:p-8 shadow-sm space-y-6">
+        <h2 class="text-xs font-black uppercase tracking-wider text-monarchEspressoLight text-center">
+          Step 1: Choose Your Preferred Language / अपनी भाषा का चयन करें
+        </h2>
+
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3.5" id="languageCards">
+          <!-- Populated by JS -->
+        </div>
+
+        <div class="pt-4 flex justify-center">
+          <button onclick="goToStep(2)" class="inline-flex items-center gap-3 px-8 py-3.5 rounded-xl bg-monarchOchre hover:bg-monarchOchreHover text-white font-bold text-sm shadow-md shadow-monarchOchre/20 transition-all transform active:scale-95 cursor-pointer">
+            <span>Find My Eligible Schemes</span>
+            <svg class="w-4 h-4 text-amber-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Trust Pillars -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+        <div class="p-4 bg-monarchBaseCard border border-monarchSage/60 rounded-xl flex items-center justify-center gap-3">
+          <svg class="w-5 h-5 text-monarchOchre shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+          <span class="text-xs font-bold text-monarchEspresso">DPDP Act Aligned (No Aadhaar Stored)</span>
+        </div>
+        <div class="p-4 bg-monarchBaseCard border border-monarchSage/60 rounded-xl flex items-center justify-center gap-3">
+          <svg class="w-5 h-5 text-monarchSageDark shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+          <span class="text-xs font-bold text-monarchEspresso">Grounded in 2026 Gov Gazettes</span>
+        </div>
+        <div class="p-4 bg-monarchBaseCard border border-monarchSage/60 rounded-xl flex items-center justify-center gap-3">
+          <svg class="w-5 h-5 text-monarchOchre shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+          <span class="text-xs font-bold text-monarchEspresso">Direct Bank Transfer (DBT) Ready</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= STEP 2: DETAILED AI ASSESSMENT WIZARD ================= -->
+    <section id="step-2" class="hidden bg-monarchBaseCard border-2 border-monarchSage rounded-2xl p-6 sm:p-9 shadow-sm space-y-8">
+      
+      <!-- Assessment Header -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-monarchSage/30 gap-3">
+        <div>
+          <span class="text-xs font-black text-monarchOchre uppercase tracking-wider">Step 2 of 5</span>
+          <h2 class="text-2xl font-black text-monarchEspresso">Comprehensive Eligibility Assessment</h2>
+          <p class="text-xs text-monarchEspressoLight font-medium">Deterministic verification across demographic, social, and economic parameters.</p>
+        </div>
+        <div class="inline-flex items-center gap-1.5 bg-monarchSageLight px-3 py-1.5 rounded-full text-xs font-bold text-monarchEspresso border border-monarchSage/50">
+          <span>Complete 4 Core Sections</span>
+        </div>
+      </div>
+
+      <!-- Progressive Form Subsections -->
+      <form id="assessmentWizardForm" onsubmit="event.preventDefault(); goToStep(3);" class="space-y-6">
+
+        <!-- SUBSECTION A: Basic Demographics -->
+        <div id="substep-a" class="wizard-pane space-y-5">
+          <h3 class="text-sm font-black uppercase text-monarchOchre tracking-wide flex items-center gap-2">
+            <span class="w-6 h-6 rounded-md bg-monarchSage text-monarchBase flex items-center justify-center text-xs">A</span>
+            Basic Demographics
+          </h3>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="space-y-1.5">
+              <label class="text-xs font-bold text-monarchEspresso block">Gender Identity</label>
+              <select id="userGender" class="w-full bg-monarchBaseLight border border-monarchSage rounded-xl px-3.5 py-2.5 text-xs font-bold text-monarchEspresso focus:outline-none focus:ring-2 focus:ring-monarchOchre">
+                <option value="Female">Female (महिला)</option>
+                <option value="Male" selected>Male (पुरुष)</option>
+                <option value="Transgender">Transgender (तृतीय लिंग)</option>
+              </select>
+            </div>
+
+            <div class="space-y-1.5">
+              <label class="text-xs font-bold text-monarchEspresso block">Age Group</label>
+              <select id="userAgeGroup" class="w-full bg-monarchBaseLight border border-monarchSage rounded-xl px-3.5 py-2.5 text-xs font-bold text-monarchEspresso focus:outline-none focus:ring-2 focus:ring-monarchOchre">
+                <option value="Under 18">Under 18 (School Age)</option>
+                <option value="18 - 25 years" selected>18 - 25 years (Youth / Student)</option>
+                <option value="26 - 45 years">26 - 45 years (Working Adult)</option>
+                <option value="46 - 59 years">46 - 59 years (Senior Working)</option>
+                <option value="60+ years">60+ years (Senior Citizen)</option>
+              </select>
+            </div>
+
+            <div class="space-y-1.5">
+              <label class="text-xs font-bold text-monarchEspresso block">Marital Status</label>
+              <select id="userMarital" class="w-full bg-monarchBaseLight border border-monarchSage rounded-xl px-3.5 py-2.5 text-xs font-bold text-monarchEspresso focus:outline-none focus:ring-2 focus:ring-monarchOchre">
+                <option value="Single / Unmarried" selected>Single / Unmarried</option>
+                <option value="Married">Married</option>
+                <option value="Widowed / Surviving Spouse">Widowed / Surviving Spouse</option>
+                <option value="Divorced / Separated">Divorced / Separated</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- SUBSECTION B: Location & Geography -->
+        <div id="substep-b" class="wizard-pane space-y-5 pt-4 border-t border-monarchSage/20">
+          <h3 class="text-sm font-black uppercase text-monarchOchre tracking-wide flex items-center gap-2">
+            <span class="w-6 h-6 rounded-md bg-monarchSage text-monarchBase flex items-center justify-center text-xs">B</span>
+            Location & Region Type
+          </h3>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="space-y-1.5">
+              <label class="text-xs font-bold text-monarchEspresso block">State / Union Territory</label>
+              <select id="userState" class="w-full bg-monarchBaseLight border border-monarchSage rounded-xl px-3.5 py-2.5 text-xs font-bold text-monarchEspresso focus:outline-none focus:ring-2 focus:ring-monarchOchre">
+                <option value="Uttar Pradesh" selected>Uttar Pradesh</option>
+                <option value="Maharashtra">Maharashtra</option>
+                <option value="Tamil Nadu">Tamil Nadu</option>
+                <option value="Rajasthan">Rajasthan</option>
+                <option value="Madhya Pradesh">Madhya Pradesh</option>
+                <option value="Bihar">Bihar</option>
+                <option value="West Bengal">West Bengal</option>
+                <option value="Karnataka">Karnataka</option>
+                <option value="Delhi NCT">Delhi NCT</option>
+              </select>
+            </div>
+
+            <div class="space-y-1.5">
+              <label class="text-xs font-bold text-monarchEspresso block">Area / Region Classification</label>
+              <select id="userRegionType" class="w-full bg-monarchBaseLight border border-monarchSage rounded-xl px-3.5 py-2.5 text-xs font-bold text-monarchEspresso focus:outline-none focus:ring-2 focus:ring-monarchOchre">
+                <option value="Rural" selected>Rural (Gram Panchayat / Village)</option>
+                <option value="Urban">Urban (Municipality / Municipal Corporation)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- SUBSECTION C: Social Category & Background -->
+        <div id="substep-c" class="wizard-pane space-y-5 pt-4 border-t border-monarchSage/20">
+          <h3 class="text-sm font-black uppercase text-monarchOchre tracking-wide flex items-center gap-2">
+            <span class="w-6 h-6 rounded-md bg-monarchSage text-monarchBase flex items-center justify-center text-xs">C</span>
+            Social Category & Special Background
+          </h3>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="space-y-1.5">
+              <label class="text-xs font-bold text-monarchEspresso block">Social Category</label>
+              <select id="userCategory" class="w-full bg-monarchBaseLight border border-monarchSage rounded-xl px-3.5 py-2.5 text-xs font-bold text-monarchEspresso focus:outline-none focus:ring-2 focus:ring-monarchOchre">
+                <option value="OBC" selected>OBC (Other Backward Class)</option>
+                <option value="SC">SC (Scheduled Caste)</option>
+                <option value="ST">ST (Scheduled Tribe)</option>
+                <option value="EWS">EWS (Economically Weaker Section)</option>
+                <option value="General">General / Open Category</option>
+              </select>
+            </div>
+
+            <div class="space-y-1.5">
+              <label class="text-xs font-bold text-monarchEspresso block">Religious / Linguistic Minority?</label>
+              <select id="userMinority" class="w-full bg-monarchBaseLight border border-monarchSage rounded-xl px-3.5 py-2.5 text-xs font-bold text-monarchEspresso focus:outline-none focus:ring-2 focus:ring-monarchOchre">
+                <option value="No" selected>No</option>
+                <option value="Yes">Yes (Muslim, Christian, Sikh, Buddhist, Jain, Parsi)</option>
+              </select>
+            </div>
+
+            <div class="space-y-1.5">
+              <label class="text-xs font-bold text-monarchEspresso block">Person with Disability (PWD)?</label>
+              <select id="userDisability" class="w-full bg-monarchBaseLight border border-monarchSage rounded-xl px-3.5 py-2.5 text-xs font-bold text-monarchEspresso focus:outline-none focus:ring-2 focus:ring-monarchOchre">
+                <option value="None" selected>None (0%)</option>
+                <option value="Below 40%">Less than 40% Disability</option>
+                <option value="40% and Above (Benchmark)">40% or More (Benchmark Disability / UDID)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- SUBSECTION D: Economic & Educational Status -->
+        <div id="substep-d" class="wizard-pane space-y-5 pt-4 border-t border-monarchSage/20">
+          <h3 class="text-sm font-black uppercase text-monarchOchre tracking-wide flex items-center gap-2">
+            <span class="w-6 h-6 rounded-md bg-monarchSage text-monarchBase flex items-center justify-center text-xs">D</span>
+            Economic & Educational Status
+          </h3>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="space-y-1.5">
+              <label class="text-xs font-bold text-monarchEspresso block">Currently a Student?</label>
+              <select id="userStudentStatus" onchange="toggleStudentLevel(this.value)" class="w-full bg-monarchBaseLight border border-monarchSage rounded-xl px-3.5 py-2.5 text-xs font-bold text-monarchEspresso focus:outline-none focus:ring-2 focus:ring-monarchOchre">
+                <option value="Yes" selected>Yes, Currently Enrolled Student</option>
+                <option value="No">No, Not Currently a Student</option>
+              </select>
+            </div>
+
+            <div class="space-y-1.5" id="educationLevelContainer">
+              <label class="text-xs font-bold text-monarchEspresso block">Highest / Current Education Level</label>
+              <select id="userEducationLevel" class="w-full bg-monarchBaseLight border border-monarchSage rounded-xl px-3.5 py-2.5 text-xs font-bold text-monarchEspresso focus:outline-none focus:ring-2 focus:ring-monarchOchre">
+                <option value="Higher Secondary (10+2)">Higher Secondary (Class 11-12)</option>
+                <option value="Undergraduate (BA/BSc/BCom/BTech)" selected>Undergraduate / Diploma / ITI</option>
+                <option value="Postgraduate / PhD">Postgraduate / Professional / PhD</option>
+                <option value="Secondary (10th)">Class 10 or Below</option>
+              </select>
+            </div>
+
+            <div class="space-y-1.5">
+              <label class="text-xs font-bold text-monarchEspresso block">BPL (Below Poverty Line) Card Holder?</label>
+              <select id="userBPL" class="w-full bg-monarchBaseLight border border-monarchSage rounded-xl px-3.5 py-2.5 text-xs font-bold text-monarchEspresso focus:outline-none focus:ring-2 focus:ring-monarchOchre">
+                <option value="Yes" selected>Yes (Antyodaya / BPL / Priority Ration Card)</option>
+                <option value="No">No (Non-BPL / APL Card)</option>
+              </select>
+            </div>
+
+            <div class="space-y-1.5">
+              <label class="text-xs font-bold text-monarchEspresso block">Total Household Annual Income</label>
+              <select id="userFamilyIncome" class="w-full bg-monarchBaseLight border border-monarchSage rounded-xl px-3.5 py-2.5 text-xs font-bold text-monarchEspresso focus:outline-none focus:ring-2 focus:ring-monarchOchre">
+                <option value="Below ₹1,00,000" selected>Below ₹1,00,000 (Low-Income EWS)</option>
+                <option value="₹1,00,000 - ₹2,50,000">₹1,00,000 - ₹2,50,000</option>
+                <option value="₹2,50,000 - ₹5,00,000">₹2,50,000 - ₹5,00,000</option>
+                <option value="₹5,00,000 - ₹8,00,000">₹5,00,000 - ₹8,00,000 (Non-Creamy Cap)</option>
+                <option value="Above ₹8,00,000">Above ₹8,00,000</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="pt-6 border-t border-monarchSage/40 flex items-center justify-between">
+          <button type="button" onclick="goToStep(1)" class="px-4 py-2.5 rounded-lg border border-monarchSage text-monarchEspresso font-bold text-xs hover:bg-monarchBaseLight cursor-pointer">
+            ← Change Language
+          </button>
+          <button type="submit" class="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-monarchOchre hover:bg-monarchOchreHover text-white font-black text-xs shadow-md shadow-monarchOchre/20 cursor-pointer">
+            <span>Analyze Scheme Eligibility</span>
+            <span class="text-amber-200">➔</span>
+          </button>
+        </div>
+
+      </form>
+    </section>
+
+    <!-- ================= STEP 3: CUSTOM SCHEME RESULTS & COMPARISON ================= -->
+    <section id="step-3" class="hidden space-y-6">
+      
+      <!-- Evaluation Banner -->
+      <div class="bg-monarchEspresso text-monarchBase p-5 sm:p-6 rounded-2xl shadow-md border-2 border-monarchSage flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <div class="flex items-center gap-2 mb-1">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 pulse-glow"></span>
+            <span class="text-xs font-black uppercase tracking-wider text-monarchSageLight">Welfare Evaluation Engine Verified</span>
+          </div>
+          <h2 class="text-xl font-black text-white">Eligible Central & State Schemes</h2>
+          <p class="text-xs text-monarchBaseLight/80 mt-1" id="resultsSummaryChip">
+            Profile: Rural • OBC • Student: Yes • Income < ₹1L • BPL Card
+          </p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="openComparisonModal()" class="text-xs px-3.5 py-2 rounded-lg bg-monarchOchre hover:bg-monarchOchreHover text-white font-bold shadow-xs cursor-pointer flex items-center gap-1.5">
+            📊 Compare Schemes
+          </button>
+          <button onclick="goToStep(2)" class="text-xs px-3 py-2 rounded-lg bg-monarchSage/30 hover:bg-monarchSage/50 text-amber-200 font-bold border border-monarchSage cursor-pointer">
+            ✎ Adjust
+          </button>
+        </div>
+      </div>
+
+      <!-- Controls Bar: Category Filters & Sort By Profit -->
+      <div class="bg-monarchBaseCard border-2 border-monarchSage rounded-2xl p-4 shadow-xs space-y-3">
+        
+        <!-- Category Filter Pills + Active/Retired Toggle -->
+        <div class="flex flex-wrap items-center justify-between gap-2.5">
+          <div class="flex flex-wrap items-center gap-1.5" id="categoryFilterContainer">
+            <button onclick="setCategoryFilter('all')" id="cat-all" class="px-3 py-1 rounded-full text-xs font-bold bg-monarchEspresso text-white cursor-pointer transition-all">All Schemes</button>
+            <button onclick="setCategoryFilter('education')" id="cat-education" class="px-3 py-1 rounded-full text-xs font-bold bg-monarchBaseLight text-monarchEspresso border border-monarchSage hover:bg-monarchSageLight cursor-pointer transition-all">🎓 Education</button>
+            <button onclick="setCategoryFilter('farmers')" id="cat-farmers" class="px-3 py-1 rounded-full text-xs font-bold bg-monarchBaseLight text-monarchEspresso border border-monarchSage hover:bg-monarchSageLight cursor-pointer transition-all">🌾 Farmers & Agriculture</button>
+            <button onclick="setCategoryFilter('livelihood')" id="cat-livelihood" class="px-3 py-1 rounded-full text-xs font-bold bg-monarchBaseLight text-monarchEspresso border border-monarchSage hover:bg-monarchSageLight cursor-pointer transition-all">💼 Livelihood & Business</button>
+            <button onclick="setCategoryFilter('disability')" id="cat-disability" class="px-3 py-1 rounded-full text-xs font-bold bg-monarchBaseLight text-monarchEspresso border border-monarchSage hover:bg-monarchSageLight cursor-pointer transition-all">♿ Disability & Welfare</button>
+          </div>
+
+          <!-- Active vs Retired Schemes Toggle -->
+          <div class="flex items-center gap-1 bg-monarchBaseLight p-1 rounded-xl border border-monarchSage/60 text-xs font-bold">
+            <button onclick="toggleSchemeStatusView(false)" id="tab-active-schemes" class="px-2.5 py-1 rounded-lg bg-monarchSageDark text-white shadow-2xs cursor-pointer">
+              Active Schemes (<span id="activeCountBadge">4</span>)
+            </button>
+            <button onclick="toggleSchemeStatusView(true)" id="tab-retired-schemes" class="px-2.5 py-1 rounded-lg text-monarchEspresso hover:bg-monarchSageLight cursor-pointer">
+              Archived / Retired (<span id="retiredCountBadge">2</span>)
+            </button>
+          </div>
+        </div>
+
+        <!-- Profit Sort Dropdown Strip -->
+        <div class="pt-2 border-t border-monarchSage/20 flex flex-col sm:flex-row sm:items-center justify-between text-xs gap-2">
+          <span class="text-monarchEspressoLight font-bold flex items-center gap-1">
+            <span>💡 Tip:</span> Sort by monetary yield to claim maximum financial benefit first.
+          </span>
+          <div class="flex items-center gap-2">
+            <label for="profitSortSelect" class="font-extrabold text-monarchEspresso">Sort by Benefit:</label>
+            <select id="profitSortSelect" onchange="changeSortOrder(this.value)" class="bg-monarchBaseLight border border-monarchSage rounded-lg px-2.5 py-1 text-xs font-bold text-monarchEspresso focus:outline-none focus:ring-1 focus:ring-monarchOchre">
+              <option value="profit-desc">Highest Profit / Benefit Value (Most to Least)</option>
+              <option value="profit-asc">Lowest Profit / Benefit Value (Least to Most)</option>
+              <option value="match-desc">Highest Match Confidence (%)</option>
+            </select>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Scheme Cards List -->
+      <div class="space-y-4" id="schemeCardsList">
+        <!-- Injected via JS based on profile input -->
+      </div>
+
+      <!-- Advance CTA -->
+      <div class="flex justify-between items-center pt-4">
+        <button onclick="goToStep(2)" class="px-4 py-2.5 rounded-lg border border-monarchSage text-monarchEspresso font-bold text-xs hover:bg-monarchBaseLight cursor-pointer">
+          ← Back to Assessment
+        </button>
+        <button onclick="openChecklist('post-matric')" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-monarchSageDark hover:bg-monarchSage text-white font-bold text-xs shadow-md cursor-pointer">
+          <span>Review Document Preparation</span>
+          <span class="text-amber-200">➔</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ================= STEP 4: INTERACTIVE DOCUMENT CHECKLIST ================= -->
+    <section id="step-4" class="hidden bg-monarchBaseCard border-2 border-monarchSage rounded-2xl p-6 sm:p-8 shadow-sm space-y-6">
+      
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-monarchSage/30 gap-3">
+        <div>
+          <span class="text-xs font-black text-monarchOchre uppercase tracking-wider">Step 4 of 5</span>
+          <h2 class="text-2xl font-black text-monarchEspresso" id="checklistHeaderTitle">Document Readiness Checklist</h2>
+          <p class="text-xs text-monarchEspressoLight font-medium">Click the info icon <span class="inline-block px-1 bg-monarchSageLight rounded text-[11px] font-bold">ℹ️</span> next to any certificate to view step-by-step instructions on how to procure it.</p>
+        </div>
+
+        <!-- Scheme Tab Switcher -->
+        <div class="flex items-center gap-1 bg-monarchSageLight p-1 rounded-xl text-xs font-bold flex-wrap" id="checklistSchemePills">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- Readiness Meter -->
+      <div class="p-4 bg-monarchBaseLight border border-monarchSage rounded-xl space-y-2">
+        <div class="flex justify-between items-center text-xs font-black">
+          <span class="text-monarchEspresso" id="checklistProgressText">Verification Progress: 2 of 4 Ready</span>
+          <span class="text-monarchOchre font-black" id="checklistProgressPct">50% Ready</span>
+        </div>
+        <div class="w-full h-3 bg-monarchSage/30 rounded-full overflow-hidden">
+          <div id="checklistProgressBar" class="h-full bg-monarchOchre transition-all duration-300" style="width: 50%;"></div>
+        </div>
+      </div>
+
+      <!-- SECTION 1: MANDATORY DOCUMENTS -->
+      <div class="space-y-2">
+        <h3 class="text-xs font-black uppercase text-monarchEspresso tracking-wider flex items-center justify-between">
+          <span>1. Mandatory Base Documents (Required for Sanction)</span>
+          <span class="text-[10px] text-monarchOchre font-bold">Strictly Enforced</span>
+        </h3>
+        <div class="divide-y divide-monarchSage/20 border-2 border-monarchSage rounded-xl overflow-hidden bg-white" id="mandatoryChecklistContainer">
+          <!-- Injected via JS -->
+        </div>
+      </div>
+
+      <!-- SECTION 2: NON-MANDATORY TOP-UP DOCUMENTS (MAXIMUM BENEFIT) -->
+      <div class="space-y-2 pt-2">
+        <div class="flex items-center justify-between">
+          <h3 class="text-xs font-black uppercase text-monarchSageDark tracking-wider flex items-center gap-1.5">
+            <span>2. Optional Add-On Documents (Unlock Maximum Profit & Subsidy)</span>
+            <span class="text-[10px] bg-amber-100 text-amber-900 px-2 py-0.5 rounded-full font-bold border border-amber-300">Boost Benefit</span>
+          </h3>
+          <span class="text-[11px] text-monarchEspressoLight font-semibold">Non-Mandatory</span>
+        </div>
+        <div class="divide-y divide-monarchSage/20 border-2 border-dashed border-monarchSage rounded-xl overflow-hidden bg-monarchBaseLight/50" id="optionalChecklistContainer">
+          <!-- Injected via JS -->
+        </div>
+      </div>
+
+      <!-- Action Navigation -->
+      <div class="flex justify-between items-center pt-4">
+        <button onclick="goToStep(3)" class="px-4 py-2.5 rounded-lg border border-monarchSage text-monarchEspresso font-bold text-xs hover:bg-monarchBaseLight cursor-pointer">
+          ← Back to Matched Schemes
+        </button>
+        <button onclick="goToStep(5)" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-monarchEspresso hover:bg-black text-monarchBase font-bold text-xs shadow-md cursor-pointer">
+          <span>Proceed to Official Submission</span>
+          <span class="text-amber-200">➔</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ================= STEP 5: OFFICIAL PORTALS & LEGAL DISCLAIMER ================= -->
+    <section id="step-5" class="hidden space-y-6">
+      
+      <!-- Official Links Card -->
+      <div class="bg-monarchBaseCard border-2 border-monarchSage rounded-2xl p-6 sm:p-8 shadow-sm space-y-4">
+        <div class="flex items-center gap-2 text-monarchSageDark text-xs font-black uppercase tracking-wider">
+          <svg class="w-4 h-4 text-monarchOchre" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+          Direct Gateway Handoff
+        </div>
+        <h2 class="text-2xl font-black text-monarchEspresso">Apply via Official Statutory Gateways</h2>
+        <p class="text-xs text-monarchEspressoLight leading-relaxed font-medium">
+          Welfare benefit disbursement is administered exclusively through official government domains (<code class="bg-monarchSageLight px-1.5 py-0.5 rounded text-monarchEspresso font-bold">.gov.in</code>). YojanaMitra never requests OTPs or application processing fees.
+        </p>
+
+        <!-- Gateway Cards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-3">
+          
+          <div class="border border-monarchSage rounded-xl p-4 bg-monarchBaseLight flex flex-col justify-between space-y-3">
+            <div>
+              <span class="text-[10px] font-black uppercase text-monarchEspressoLight">Ministry of Social Justice</span>
+              <h4 class="font-black text-monarchEspresso text-sm mt-0.5">National Scholarship Portal (NSP)</h4>
+              <p class="text-xs text-monarchEspressoLight mt-1">Pre-Matric, Post-Matric & Merit scholarships registration.</p>
+            </div>
+            <a href="https://scholarships.gov.in" target="_blank" rel="noreferrer" class="py-2.5 px-3 rounded-lg bg-monarchEspresso hover:bg-black text-amber-200 text-xs font-black text-center flex items-center justify-center gap-1.5">
+              Open scholarships.gov.in ↗
+            </a>
+          </div>
+
+          <div class="border border-monarchSage rounded-xl p-4 bg-monarchBaseLight flex flex-col justify-between space-y-3">
+            <div>
+              <span class="text-[10px] font-black uppercase text-monarchEspressoLight">Ministry of Agriculture</span>
+              <h4 class="font-black text-monarchEspresso text-sm mt-0.5">PM-KISAN DBT Portal</h4>
+              <p class="text-xs text-monarchEspressoLight mt-1">Direct ₹6,000 agricultural income supplement verification.</p>
+            </div>
+            <a href="https://pmkisan.gov.in" target="_blank" rel="noreferrer" class="py-2.5 px-3 rounded-lg bg-monarchEspresso hover:bg-black text-amber-200 text-xs font-black text-center flex items-center justify-center gap-1.5">
+              Open pmkisan.gov.in ↗
+            </a>
+          </div>
+
+          <div class="border border-monarchSage rounded-xl p-4 bg-monarchBaseLight flex flex-col justify-between space-y-3">
+            <div>
+              <span class="text-[10px] font-black uppercase text-monarchEspressoLight">Ministry of Social Justice (DEPwD)</span>
+              <h4 class="font-black text-monarchEspresso text-sm mt-0.5">UDID Card / Swavlamban</h4>
+              <p class="text-xs text-monarchEspressoLight mt-1">Unique Disability ID & assistance grants registration portal.</p>
+            </div>
+            <a href="https://swavlambancard.gov.in" target="_blank" rel="noreferrer" class="py-2.5 px-3 rounded-lg bg-monarchEspresso hover:bg-black text-amber-200 text-xs font-black text-center flex items-center justify-center gap-1.5">
+              Open swavlambancard.gov.in ↗
+            </a>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- STATUTORY LEGAL DISCLAIMER BANNER -->
+      <div class="bg-monarchBaseCard border-2 border-monarchOchre rounded-2xl p-6 shadow-sm space-y-3">
+        <div class="flex items-center gap-2 text-monarchOchre font-black text-sm uppercase tracking-wider">
+          <svg class="w-5 h-5 text-monarchOchre shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+          Statutory Legal Notice & Advisory
+        </div>
+        <p class="text-xs text-monarchEspresso font-medium leading-relaxed">
+          <strong>Independent Civic Tech Platform:</strong> YojanaMitra (SchemeAI) is an independent, automated public-guidance AI system. It is <strong>not</strong> an official ministry authority of the Government of India or any State Administration.
+        </p>
+        <p class="text-xs text-monarchEspresso font-medium leading-relaxed">
+          <strong>No Guarantee of Sanction:</strong> Match scores and required checklist determinations are indicative calculations derived from published Gazette operational manuals. Final approval, benefit disbursement, and certificate acceptance remain solely under the statutory jurisdiction of the authorized District Magistrate, Revenue Officer, or Nodal Departmental Secretary.
+        </p>
+      </div>
+
+      <!-- Restart Session -->
+      <div class="flex justify-center pt-2">
+        <button onclick="goToStep(1)" class="px-6 py-3 rounded-xl border-2 border-monarchSage bg-monarchBaseCard hover:bg-monarchBaseLight text-monarchEspresso font-black text-xs shadow-xs cursor-pointer">
+          ↺ Start a New Welfare Assessment
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= MODAL: HOW TO GET THIS DOCUMENT ================= -->
+  <div id="docProcurementModal" class="fixed inset-0 z-50 bg-monarchEspresso/60 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+    <div class="bg-monarchBaseCard border-2 border-monarchSage rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-start justify-between border-b border-monarchSage/30 pb-3">
+        <div>
+          <span class="text-[10px] font-black uppercase text-monarchOchre tracking-wider">Official Procurement Guide</span>
+          <h3 class="text-base font-black text-monarchEspresso" id="procureModalDocName">Document Name</h3>
+        </div>
+        <button onclick="closeProcureModal()" class="text-monarchEspresso hover:text-black p-1 rounded-lg">✕</button>
+      </div>
+
+      <div class="space-y-3 text-xs text-monarchEspresso">
+        <div class="bg-monarchBaseLight p-3 rounded-xl border border-monarchSage/50 space-y-1">
+          <span class="font-extrabold text-monarchSageDark block uppercase tracking-wider text-[10px]">Where to Obtain / Issuing Authority</span>
+          <p id="procureModalAuthority" class="font-bold">Tehsil Office / CSC Center</p>
+        </div>
+
+        <div class="space-y-1.5">
+          <span class="font-extrabold text-monarchEspresso block">Step-by-Step Instructions:</span>
+          <p id="procureModalSteps" class="text-monarchEspressoLight leading-relaxed">
+            Visit your nearest Jan Seva Kendra / Common Service Centre with your Aadhaar and passport photo.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2 pt-1 text-[11px]">
+          <div class="bg-white p-2.5 rounded-lg border border-monarchSage/40">
+            <span class="text-slate-400 block font-bold">Estimated Turnaround:</span>
+            <span id="procureModalTimeline" class="font-black text-monarchEspresso">3 - 7 Working Days</span>
+          </div>
+          <div class="bg-white p-2.5 rounded-lg border border-monarchSage/40">
+            <span class="text-slate-400 block font-bold">Official Statutory Fee:</span>
+            <span id="procureModalCost" class="font-black text-monarchOchre">Free / ₹30 Portal Fee</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-2 flex justify-end">
+        <button onclick="closeProcureModal()" class="px-5 py-2 rounded-xl bg-monarchEspresso hover:bg-black text-white text-xs font-bold">
+          Understood
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: SCHEME COMPARISON (MOST TO LEAST PROFIT) ================= -->
+  <div id="comparisonModal" class="fixed inset-0 z-50 bg-monarchEspresso/60 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+    <div class="bg-monarchBaseCard border-2 border-monarchSage rounded-2xl max-w-4xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-start justify-between border-b border-monarchSage/30 pb-3">
+        <div>
+          <span class="text-[10px] font-black uppercase text-monarchOchre tracking-wider">Comparative Benefit Matrix</span>
+          <h3 class="text-lg font-black text-monarchEspresso">Scheme Comparison Ranked by Estimated Profit / Value</h3>
+        </div>
+        <button onclick="closeComparisonModal()" class="text-monarchEspresso hover:text-black p-1 text-sm font-bold">✕ Close</button>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs border-collapse">
+          <thead>
+            <tr class="bg-monarchSageLight text-monarchEspresso border-b border-monarchSage">
+              <th class="p-3 font-black">Rank & Scheme</th>
+              <th class="p-3 font-black">Category</th>
+              <th class="p-3 font-black text-monarchOchre">Financial Yield / Profit</th>
+              <th class="p-3 font-black">Match %</th>
+              <th class="p-3 font-black">Application Channel</th>
+            </tr>
+          </thead>
+          <tbody id="comparisonTableBody" class="divide-y divide-monarchSage/30 bg-white">
+            <!-- Dynamically populated -->
+          </tbody>
+        </table>
+      </div>
+
+      <div class="pt-2 flex justify-end">
+        <button onclick="closeComparisonModal()" class="px-5 py-2 rounded-xl bg-monarchEspresso hover:bg-black text-white text-xs font-bold">
+          Close Comparison
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= FLOATING AI CHAT ASSISTANT (ASK AI) ================= -->
+  <!-- Floating Action Button -->
+  <div class="fixed bottom-6 right-6 z-50">
+    <button onclick="toggleChat(true)" class="relative p-4 rounded-full bg-monarchEspresso text-white shadow-2xl hover:bg-black transition-transform active:scale-95 flex items-center justify-center cursor-pointer border-2 border-amber-200/40 group" aria-label="Open AI Welfare Assistant">
+      <span class="absolute -top-1 -right-1 flex h-4 w-4">
+        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-monarchOchre opacity-75"></span>
+        <span class="relative inline-flex rounded-full h-4 w-4 bg-monarchOchre border-2 border-white"></span>
+      </span>
+      <svg class="w-6 h-6 text-amber-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Slide-Out Chat Drawer -->
+  <div id="aiChatDrawer" class="fixed inset-y-0 right-0 w-full sm:w-96 bg-monarchBaseCard border-l-2 border-monarchSage shadow-2xl z-50 transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col">
+    
+    <!-- Drawer Header -->
+    <div class="p-4 bg-monarchEspresso text-monarchBase flex items-center justify-between border-b border-monarchSage/40">
+      <div class="flex items-center gap-2.5">
+        <div class="w-8 h-8 rounded-lg bg-monarchSageDark flex items-center justify-center text-amber-200 font-black">
+          ✨
+        </div>
+        <div>
+          <h3 class="text-xs font-black text-white">Ask AI Scheme Assistant</h3>
+          <p class="text-[10px] text-amber-200 font-medium">Grounded in 2026 Welfare Operational Manuals</p>
+        </div>
+      </div>
+      <button onclick="toggleChat(false)" class="p-1 rounded-lg text-monarchBaseLight hover:text-white hover:bg-white/10 cursor-pointer">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+      </button>
+    </div>
+
+    <!-- Quick Prompt Chips -->
+    <div class="p-2.5 bg-monarchBase border-b border-monarchSage/40 flex gap-1.5 overflow-x-auto">
+      <button onclick="sendQuickPrompt('Why am I eligible?')" class="px-2.5 py-1 rounded-full bg-monarchBaseCard border border-monarchSage text-monarchEspresso text-[11px] font-bold whitespace-nowrap hover:bg-monarchSageLight cursor-pointer shadow-2xs">
+        Why am I eligible?
+      </button>
+      <button onclick="sendQuickPrompt('Explain in Hindi')" class="px-2.5 py-1 rounded-full bg-monarchBaseCard border border-monarchSage text-monarchEspresso text-[11px] font-bold whitespace-nowrap hover:bg-monarchSageLight cursor-pointer shadow-2xs">
+        Explain in Hindi
+      </button>
+      <button onclick="sendQuickPrompt('Which scheme has the most profit?')" class="px-2.5 py-1 rounded-full bg-monarchBaseCard border border-monarchSage text-monarchEspresso text-[11px] font-bold whitespace-nowrap hover:bg-monarchSageLight cursor-pointer shadow-2xs">
+        Which scheme has most profit?
+      </button>
+      <button onclick="sendQuickPrompt('What are non-mandatory documents?')" class="px-2.5 py-1 rounded-full bg-monarchBaseCard border border-monarchSage text-monarchEspresso text-[11px] font-bold whitespace-nowrap hover:bg-monarchSageLight cursor-pointer shadow-2xs">
+        What are non-mandatory docs?
+      </button>
+    </div>
+
+    <!-- Chat Messages Stream -->
+    <div id="chatMessageStream" class="flex-1 p-4 overflow-y-auto space-y-3 bg-monarchBaseLight text-xs">
+      <div class="flex justify-start">
+        <div class="max-w-[85%] rounded-2xl p-3 bg-white text-monarchEspresso border border-monarchSage/50 shadow-2xs leading-relaxed">
+          Namaste! I am your <strong>YojanaMitra AI Assistant</strong>. Ask me anything about ranking schemes by highest financial payout, non-mandatory top-up documents, or offline CSC counter submissions.
+        </div>
+      </div>
+    </div>
+
+    <!-- Chat Input Form -->
+    <form onsubmit="handleChatSubmit(event)" class="p-3 bg-monarchBaseCard border-t border-monarchSage/40 flex items-center gap-2">
+      <input type="text" id="chatInputField" placeholder="Ask about profit ranking, documents, rules..." class="flex-1 bg-white border border-monarchSage rounded-xl px-3.5 py-2 text-xs font-semibold text-monarchEspresso focus:outline-none focus:ring-1 focus:ring-monarchOchre" />
+      <button type="submit" class="p-2 rounded-xl bg-monarchOchre text-white hover:bg-monarchOchreHover transition-colors cursor-pointer">
+        <svg class="w-4 h-4 text-amber-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
+      </button>
+    </form>
+  </div>
+
+  <!-- Civic Footer -->
+  <footer class="mt-auto border-t border-monarchSage/40 bg-monarchBaseCard py-6 text-center text-xs text-monarchEspressoLight space-y-1">
+    <p class="font-extrabold text-monarchEspresso">YojanaMitra (SchemeAI) • Civic Public Interest Technology</p>
+    <p class="text-[11px] text-monarchEspressoLight">Built with high-contrast accessibility standards. All data grounded in Central & State Government portals.</p>
+  </footer>
+
+  <!-- ================= JAVASCRIPT STATE ENGINE ================= -->
+  <script>
+    let currentStep = 1;
+    let selectedLanguage = 'en';
+    let activeChecklistSchemeId = 'post-matric';
+    let selectedCategoryFilter = 'all';
+    let currentSortOrder = 'profit-desc';
+    let isViewingRetired = false;
+
+    const LANGUAGES = [
+      { code: 'en', label: 'English', native: 'English' },
+      { code: 'hi', label: 'Hindi', native: 'हिन्दी' },
+      { code: 'mr', label: 'Marathi', native: 'मराठी' },
+      { code: 'ta', label: 'Tamil', native: 'தமிழ்' },
+      { code: 'te', label: 'Telugu', native: 'తెలుగు' },
+      { code: 'bn', label: 'Bengali', native: 'বাংলা' }
+    ];
+
+    // Master Scheme Database with Monetary Value (Profit), Categories, Exclusions, and Procurement Guides
+    const SCHEME_DB = [
+      {
+        id: 'post-matric',
+        name: 'Post-Matric Scholarship Scheme (OBC, SC, ST & Minority)',
+        ministry: 'Ministry of Social Justice & Empowerment',
+        categoryGroup: 'education',
+        isRetired: false,
+        matchScore: 97,
+        category: 'Higher Education Grant',
+        benefit: 'Full compulsory fees waiver + ₹13,500/yr maintenance allowance',
+        numericValue: 48500, // Total estimated annual benefit value
+        whyQualify: [
+          'Enrolled in recognized Post-Matriculation / Higher Education Degree program',
+          'Belongs to reserved social category (SC/ST/OBC/Minority/EWS)',
+          'Family income verified under the statutory limit of ₹2,50,000/yr',
+          'Institution possesses active AISHE accreditation code'
+        ],
+        whyNotQualify: [
+          'Student is enrolled through distance/correspondence mode without practical credits',
+          'Student is already availing another concurrent central or UGC stipend',
+          'Applicant has failed the recurring academic session twice consecutively'
+        ],
+        documents: [
+          { 
+            id: 'aadhaar', 
+            name: 'Aadhaar Card (Mobile Number & NPCI Linked)', 
+            authority: 'UIDAI', 
+            isMandatory: true,
+            ready: true,
+            steps: 'Download e-Aadhaar from uidai.gov.in or visit your nearest Aadhaar Seva Kendra for biometric mobile update.',
+            turnaround: 'Instant (Online) / 3 Days',
+            cost: 'Free online / ₹50 for update'
+          },
+          { 
+            id: 'caste_cert', 
+            name: 'Valid Social Category / Caste Certificate', 
+            authority: 'Tehsildar / SDO Revenue Office', 
+            isMandatory: true,
+            ready: true,
+            steps: 'Apply online on your state e-District portal or submit Form 1 at Tehsil desk with ancestral land/caste proof.',
+            turnaround: '7 - 14 Business Days',
+            cost: '₹30 CSC processing fee'
+          },
+          { 
+            id: 'income_cert', 
+            name: 'Competent Authority Income Certificate (< ₹2.5L)', 
+            authority: 'Revenue Department / Lekhpal', 
+            isMandatory: true,
+            ready: false,
+            steps: 'Apply via CSC / Tehsil with electricity bill, salary slip, or Patwari verification report.',
+            turnaround: '5 - 10 Business Days',
+            cost: '₹20 - ₹50'
+          },
+          { 
+            id: 'college_bonafide', 
+            name: 'Institution Bonafide & Fee Receipt', 
+            authority: 'College / University Registrar', 
+            isMandatory: true,
+            ready: true,
+            steps: 'Obtain from your college administrative desk with seal and signature of the Principal / Dean.',
+            turnaround: '1 - 2 Business Days',
+            cost: 'Free'
+          },
+          // NON-MANDATORY TOP-UP DOCUMENTS FOR MAXIMUM BENEFIT
+          { 
+            id: 'hostel_cert', 
+            name: 'Hosteller Verification Certificate', 
+            authority: 'Chief Warden / Institution Hostel Desk', 
+            isMandatory: false,
+            topUpBenefit: 'Unlocks +₹8,000/year additional hosteller maintenance stipend',
+            ready: false,
+            steps: 'Procure stamped mess and hostel allotment ledger certificate from the institution warden.',
+            turnaround: '1 Business Day',
+            cost: 'Free'
+          },
+          { 
+            id: 'disability_sub_card', 
+            name: 'Special Disability Study Equipment Requisition', 
+            authority: 'District Medical Board / College Equal Opportunity Cell', 
+            isMandatory: false,
+            topUpBenefit: 'Unlocks +₹4,000/yr book grant and reader allowance for visually impaired',
+            ready: false,
+            steps: 'Submit alongside UDID card to college nodal welfare officer.',
+            turnaround: '2 - 3 Days',
+            cost: 'Free'
+          }
+        ]
+      },
+      {
+        id: 'pm-surya',
+        name: 'PM Surya Ghar: Muft Bijli Yojana (Rooftop Solar Subsidy)',
+        ministry: 'Ministry of New and Renewable Energy',
+        categoryGroup: 'livelihood',
+        isRetired: false,
+        matchScore: 95,
+        category: 'Clean Energy & Capital Subsidy',
+        benefit: 'Direct capital cash subsidy up to ₹78,000 for residential 3kW rooftop solar',
+        numericValue: 78000,
+        whyQualify: [
+          'Household possesses independent residential roof ownership rights',
+          'Valid domestic grid-connected DISCOM electricity connection',
+          'Annual family income satisfies state utility slabs'
+        ],
+        whyNotQualify: [
+          'Commercial or industrial power connection meter installed',
+          'Applicant has previously received solar capital subsidies from central/state agencies',
+          'Premises roof is disputed or rented without explicit landlord NOC'
+        ],
+        documents: [
+          { 
+            id: 'aadhaar', 
+            name: 'Aadhaar Card of Head of Household', 
+            authority: 'UIDAI', 
+            isMandatory: true,
+            ready: true,
+            steps: 'Verify UIDAI match with electricity meter consumer name.',
+            turnaround: 'Instant',
+            cost: 'Free'
+          },
+          { 
+            id: 'elec_bill', 
+            name: 'Latest Electricity Bill (Past 3 Months)', 
+            authority: 'State DISCOM Electricity Department', 
+            isMandatory: true,
+            ready: true,
+            steps: 'Download consumer receipt copy from state electricity board website or payment app.',
+            turnaround: 'Instant',
+            cost: 'Free'
+          },
+          { 
+            id: 'roof_proof', 
+            name: 'Roof Rights / Property Tax Receipt', 
+            authority: 'Municipal Corporation / Gram Panchayat', 
+            isMandatory: true,
+            ready: false,
+            steps: 'Procure latest house tax or municipal assessment receipt from municipal counter.',
+            turnaround: '1 - 3 Days',
+            cost: 'Free / Municipal tax dues'
+          },
+          // NON-MANDATORY TOP-UP
+          { 
+            id: 'dcr_module_cert', 
+            name: 'Domestic Content Requirement (DCR) Solar Cell Certificate', 
+            authority: 'Empaneled Vendor / MNRE Tech Team', 
+            isMandatory: false,
+            topUpBenefit: 'Unlocks extra ₹15,000 state supplementary top-up incentive',
+            ready: false,
+            steps: 'Request directly from your approved MNRE empanelled solar vendor.',
+            turnaround: 'Supplied during installation',
+            cost: 'Covered in vendor quotation'
+          }
+        ]
+      },
+      {
+        id: 'adip-pwd',
+        name: 'ADIP & Pre/Post-Matric Scholarship for Persons with Disabilities',
+        ministry: 'Department of Empowerment of Persons with Disabilities',
+        categoryGroup: 'disability',
+        isRetired: false,
+        matchScore: 94,
+        category: 'Disability Allowance & Assistive Aid',
+        benefit: 'Free motorized assistive equipment + ₹4,000/mo educational disability grant',
+        numericValue: 48000,
+        whyQualify: [
+          'Certified benchmark disability of 40% or more with valid UDID card',
+          'Family income verified below ₹3,00,000 per annum',
+          'Eligible for direct smart assistive equipment distribution through ALIMCO'
+        ],
+        whyNotQualify: [
+          'Certified disability percentage is less than the statutory 40% threshold',
+          'Applicant has received similar motorized assistive aid within the preceding 3 years'
+        ],
+        documents: [
+          { 
+            id: 'aadhaar', 
+            name: 'Aadhaar Card', 
+            authority: 'UIDAI', 
+            isMandatory: true,
+            ready: true,
+            steps: 'Ensure Aadhaar card is seeded with active bank account for DBT grant.',
+            turnaround: 'Instant',
+            cost: 'Free'
+          },
+          { 
+            id: 'udid', 
+            name: 'UDID Disability Card (40%+ Benchmark Certificate)', 
+            authority: 'District Medical Board / CMO Office', 
+            isMandatory: true,
+            ready: false,
+            steps: 'Register online at swavlambancard.gov.in and appear before the District Civil Hospital Medical Board.',
+            turnaround: '15 - 30 Business Days',
+            cost: 'Free'
+          },
+          { 
+            id: 'income_cert', 
+            name: 'Household Income Proof / BPL Card', 
+            authority: 'State Revenue Department', 
+            isMandatory: true,
+            ready: true,
+            steps: 'Submit Antyodaya/BPL card or Tehsildar income certificate.',
+            turnaround: '3 - 7 Days',
+            cost: '₹30'
+          },
+          // NON-MANDATORY TOP-UP
+          { 
+            id: 'alimco_assessment', 
+            name: 'ALIMCO Specialized Assistive Needs Assessment Slip', 
+            authority: 'ALIMCO Camp Doctor / District Rehabilitation Centre (DDRC)', 
+            isMandatory: false,
+            topUpBenefit: 'Upgrades standard tricycle to Smart Motorized High-Range Wheelchair',
+            ready: false,
+            steps: 'Attend District DDRC assessment camp organized by Ministry nodal doctors.',
+            turnaround: 'At organized camp session',
+            cost: 'Free'
+          }
+        ]
+      },
+      {
+        id: 'pm-kisan',
+        name: 'PM-KISAN (Pradhan Mantri Kisan Samman Nidhi)',
+        ministry: 'Ministry of Agriculture & Farmers Welfare',
+        categoryGroup: 'farmers',
+        isRetired: false,
+        matchScore: 91,
+        category: 'Direct Income Support',
+        benefit: '₹6,000 per annum credited directly in 3 equal four-monthly payments',
+        numericValue: 6000,
+        whyQualify: [
+          'Applicant resides in designated Rural Gram Panchayat area',
+          'Holding registered cultivable agricultural land in revenue records',
+          'Household fits small & marginal agrarian classification'
+        ],
+        whyNotQualify: [
+          'Applicant or spouse is an income tax payee in the previous assessment year',
+          'Land is registered under institutional names or trusts',
+          'Applicant holds or held constitutional post / government permanent employment'
+        ],
+        documents: [
+          { 
+            id: 'aadhaar', 
+            name: 'Aadhaar Card', 
+            authority: 'UIDAI', 
+            isMandatory: true,
+            ready: true,
+            steps: 'Must be verified via e-KYC on pmkisan.gov.in using Aadhaar OTP.',
+            turnaround: 'Instant Online',
+            cost: 'Free online / ₹15 at CSC'
+          },
+          { 
+            id: 'khasra', 
+            name: 'Land Record (RoR / Khasra / Khatauni Copy)', 
+            authority: 'Revenue Inspector / Tehsil / Bhulekh Portal', 
+            isMandatory: true,
+            ready: false,
+            steps: 'Download digitally signed Khatauni from your state Bhulekh portal (e.g. upbhulekh.gov.in).',
+            turnaround: 'Instant Online',
+            cost: 'Free to view / ₹15 for certified copy'
+          },
+          { 
+            id: 'bank_passbook', 
+            name: 'Active DBT Enabled Bank Account', 
+            authority: 'Scheduled Commercial / Post Office Bank', 
+            isMandatory: true,
+            ready: true,
+            steps: 'Submit NPCI Aadhaar seeding mandate form at your home bank branch.',
+            turnaround: '2 - 3 Days',
+            cost: 'Free'
+          },
+          // NON-MANDATORY TOP-UP
+          { 
+            id: 'soil_health_card', 
+            name: 'Soil Health Card & Kisan Credit Card (KCC) Linking', 
+            authority: 'Block Agriculture Department Office', 
+            isMandatory: false,
+            topUpBenefit: 'Unlocks ₹3,00,000 collateral-free low 4% interest crop credit loan',
+            ready: false,
+            steps: 'Submit soil test sample or apply via single-page KCC form at your branch.',
+            turnaround: '7 - 14 Days',
+            cost: 'Free'
+          }
+        ]
+      },
+      {
+        id: 'pm-svanidhi',
+        name: 'PM SVANidhi (Micro-Credit Livelihood Scheme)',
+        ministry: 'Ministry of Housing and Urban Affairs',
+        categoryGroup: 'livelihood',
+        isRetired: false,
+        matchScore: 88,
+        category: 'Working Capital Loan',
+        benefit: 'Collateral-free working capital loan up to ₹50,000 with 7% interest subsidy',
+        numericValue: 50000,
+        whyQualify: [
+          'Engaged in urban/semi-urban vending, micro-business, or artisanal services',
+          'Possesses Urban Local Body (ULB) vending endorsement or LoR',
+          'Eligible for direct cashback incentives on digital UPI transactions'
+        ],
+        whyNotQualify: [
+          'Applicant has a non-performing loan (NPA) default with statutory commercial lenders',
+          'Vending stall operates in unauthorized restricted security railway zone'
+        ],
+        documents: [
+          { 
+            id: 'aadhaar', 
+            name: 'Aadhaar Card', 
+            authority: 'UIDAI', 
+            isMandatory: true,
+            ready: true,
+            steps: 'Used for instant e-KYC on pmsvanidhi.mohua.gov.in.',
+            turnaround: 'Instant',
+            cost: 'Free'
+          },
+          { 
+            id: 'vending_cert', 
+            name: 'Certificate of Vending / Letter of Recommendation (LoR)', 
+            authority: 'Town Vending Committee (TVC) / Nagar Nigam', 
+            isMandatory: true,
+            ready: false,
+            steps: 'Apply at your local Municipal ward office or download from state ULB portal.',
+            turnaround: '7 Days',
+            cost: 'Free'
+          },
+          { 
+            id: 'bank_passbook', 
+            name: 'Bank Account Passbook / Statement', 
+            authority: 'Bank', 
+            isMandatory: true,
+            ready: true,
+            steps: 'Any active savings account passbook with IFSC code.',
+            turnaround: 'Instant',
+            cost: 'Free'
+          },
+          // NON-MANDATORY TOP-UP
+          { 
+            id: 'bhim_upi_qr', 
+            name: 'Active Merchant UPI QR Code Registration', 
+            authority: 'Any UPI Payment Aggregator (BHIM / PhonePe / Paytm)', 
+            isMandatory: false,
+            topUpBenefit: 'Unlocks up to ₹1,200/year cashback credited directly for digital transactions',
+            ready: false,
+            steps: 'Generate merchant QR code linked to loan account via bank app.',
+            turnaround: 'Instant',
+            cost: 'Free'
+          }
+        ]
+      },
+      // RETIRED / SUNSET SCHEMES
+      {
+        id: 'rgvy-retired',
+        name: 'Rajiv Gandhi Grameen Vidyutikaran Yojana (RGGVY)',
+        ministry: 'Ministry of Power',
+        categoryGroup: 'farmers',
+        isRetired: true,
+        matchScore: 0,
+        category: 'Rural Electrification [RETIRED / MERGED]',
+        benefit: 'Free basic electricity connection for BPL rural households (Discontinued)',
+        numericValue: 0,
+        whyQualify: ['Historical Program: Was applicable to rural BPL families without domestic electricity.'],
+        whyNotQualify: ['Scheme has been officially SUNSET and merged into modern universal electrification programs.'],
+        retiredDetails: {
+          yearRetired: '2015',
+          reason: 'Merged into Deen Dayal Upadhyaya Gram Jyoti Yojana (DDUGJY) and later modernized into PM Saubhagya and PM Surya Ghar.',
+          replacementSchemeId: 'pm-surya',
+          replacementSchemeName: 'PM Surya Ghar: Muft Bijli Yojana'
+        },
+        documents: []
+      },
+      {
+        id: 'sabla-retired',
+        name: 'Rajiv Gandhi Scheme for Empowerment of Adolescent Girls (SABLA)',
+        ministry: 'Ministry of Women and Child Development',
+        categoryGroup: 'education',
+        isRetired: true,
+        matchScore: 0,
+        category: 'Adolescent Nutrition & Skill [RETIRED / REPLACED]',
+        benefit: 'Nutrition and life skills kits for out-of-school girls aged 11-14 (Phased Out)',
+        numericValue: 0,
+        whyQualify: ['Historical Program: Targeted adolescent girls in 205 selected districts.'],
+        whyNotQualify: ['Officially superseded under restructured umbrella guidelines of Mission Poshan 2.0.'],
+        retiredDetails: {
+          yearRetired: '2021',
+          reason: 'Consolidated into Umbrella ICDS - Mission Saksham Anganwadi and Poshan 2.0 (Scheme for Adolescent Girls).',
+          replacementSchemeId: 'post-matric',
+          replacementSchemeName: 'Post-Matric Scholarship Scheme'
+        },
+        documents: []
+      }
+    ];
+
+    // --- Navigation Flow ---
+    function goToStep(step) {
+      currentStep = step;
+      for (let i = 1; i <= 5; i++) {
+        const el = document.getElementById(`step-${i}`);
+        if (el) el.classList.toggle('hidden', i !== step);
+
+        const pill = document.getElementById(`nav-pill-${i}`);
+        if (pill) {
+          if (i === step) {
+            pill.className = 'px-2.5 py-1 rounded-full bg-monarchEspresso text-monarchBase font-bold transition-all';
+          } else if (i < step) {
+            pill.className = 'px-2.5 py-1 rounded-full bg-monarchSage text-white font-bold transition-all';
+          } else {
+            pill.className = 'px-2.5 py-1 rounded-full text-monarchEspressoLight transition-all';
+          }
+        }
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      if (step === 3) renderSchemeResults();
+      if (step === 4) renderChecklist();
+    }
+
+    // --- Language Picker ---
+    function renderLanguageCards() {
+      const container = document.getElementById('languageCards');
+      container.innerHTML = LANGUAGES.map(lang => {
+        const isSelected = selectedLanguage === lang.code;
+        return `
+          <button type="button" onclick="changeLanguage('${lang.code}')" class="p-4 rounded-xl text-left border-2 transition-all flex flex-col justify-between cursor-pointer ${
+            isSelected 
+              ? 'border-monarchOchre bg-monarchSageLight/40 shadow-xs' 
+              : 'border-monarchSage/50 hover:border-monarchSage bg-white'
+          }">
+            <div class="flex justify-between items-center mb-1">
+              <span class="text-base font-black text-monarchEspresso">${lang.native}</span>
+              ${isSelected ? '<span class="text-monarchOchre font-black text-xs">✓ Active</span>' : ''}
+            </div>
+            <span class="text-xs text-monarchEspressoLight font-bold">${lang.label}</span>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function changeLanguage(code) {
+      selectedLanguage = code;
+      document.getElementById('headerLangSelect').value = code;
+      renderLanguageCards();
+    }
+
+    function toggleStudentLevel(val) {
+      const container = document.getElementById('educationLevelContainer');
+      if (container) {
+        container.style.opacity = val === 'Yes' ? '1' : '0.6';
+      }
+    }
+
+    // --- Category Filter & Sort Engine (Step 3) ---
+    function setCategoryFilter(cat) {
+      selectedCategoryFilter = cat;
+      const categories = ['all', 'education', 'farmers', 'livelihood', 'disability'];
+      categories.forEach(c => {
+        const btn = document.getElementById(`cat-${c}`);
+        if (btn) {
+          if (c === cat) {
+            btn.className = 'px-3 py-1 rounded-full text-xs font-bold bg-monarchEspresso text-white cursor-pointer transition-all shadow-xs';
+          } else {
+            btn.className = 'px-3 py-1 rounded-full text-xs font-bold bg-monarchBaseLight text-monarchEspresso border border-monarchSage hover:bg-monarchSageLight cursor-pointer transition-all';
+          }
+        }
+      });
+      renderSchemeResults();
+    }
+
+    function changeSortOrder(val) {
+      currentSortOrder = val;
+      renderSchemeResults();
+    }
+
+    function toggleSchemeStatusView(retired) {
+      isViewingRetired = retired;
+      const activeBtn = document.getElementById('tab-active-schemes');
+      const retiredBtn = document.getElementById('tab-retired-schemes');
+      if (retired) {
+        retiredBtn.className = 'px-2.5 py-1 rounded-lg bg-monarchOchre text-white font-bold shadow-2xs cursor-pointer';
+        activeBtn.className = 'px-2.5 py-1 rounded-lg text-monarchEspresso hover:bg-monarchSageLight font-bold cursor-pointer';
+      } else {
+        activeBtn.className = 'px-2.5 py-1 rounded-lg bg-monarchSageDark text-white font-bold shadow-2xs cursor-pointer';
+        retiredBtn.className = 'px-2.5 py-1 rounded-lg text-monarchEspresso hover:bg-monarchSageLight font-bold cursor-pointer';
+      }
+      renderSchemeResults();
+    }
+
+    // --- Render Schemes for Step 3 ---
+    function renderSchemeResults() {
+      const gender = document.getElementById('userGender').value;
+      const state = document.getElementById('userState').value;
+      const region = document.getElementById('userRegionType').value;
+      const category = document.getElementById('userCategory').value;
+      const isStudent = document.getElementById('userStudentStatus').value;
+      const isBPL = document.getElementById('userBPL').value;
+      const income = document.getElementById('userFamilyIncome').value;
+
+      document.getElementById('resultsSummaryChip').textContent = 
+        `Criteria: ${region} • ${category} • Student: ${isStudent} • BPL: ${isBPL} • ${income}`;
+
+      // Update badge counts
+      const activeTotal = SCHEME_DB.filter(s => !s.isRetired).length;
+      const retiredTotal = SCHEME_DB.filter(s => s.isRetired).length;
+      document.getElementById('activeCountBadge').textContent = activeTotal;
+      document.getElementById('retiredCountBadge').textContent = retiredTotal;
+
+      // Filter by active/retired status
+      let list = SCHEME_DB.filter(s => s.isRetired === isViewingRetired);
+
+      // Filter by Category
+      if (selectedCategoryFilter !== 'all') {
+        list = list.filter(s => s.categoryGroup === selectedCategoryFilter);
+      }
+
+      // Sort by Profit (Monetary Value) or Match
+      if (currentSortOrder === 'profit-desc') {
+        list.sort((a, b) => b.numericValue - a.numericValue);
+      } else if (currentSortOrder === 'profit-asc') {
+        list.sort((a, b) => a.numericValue - b.numericValue);
+      } else if (currentSortOrder === 'match-desc') {
+        list.sort((a, b) => b.matchScore - a.matchScore);
+      }
+
+      const container = document.getElementById('schemeCardsList');
+      if (list.length === 0) {
+        container.innerHTML = `
+          <div class="bg-white border-2 border-dashed border-monarchSage rounded-2xl p-8 text-center text-xs font-bold text-monarchEspressoLight">
+            No schemes found under this specific category filter. Select "All Schemes" above.
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = list.map((scheme, rankIdx) => {
+        if (scheme.isRetired) {
+          // Render Retired Scheme Card
+          return `
+            <div class="bg-monarchBaseLight border-2 border-dashed border-monarchSage rounded-2xl p-6 shadow-xs opacity-90 space-y-4">
+              <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+                <div>
+                  <div class="flex items-center gap-2 mb-1.5 flex-wrap">
+                    <span class="px-2.5 py-0.5 rounded-md bg-stone-500 text-white text-xs font-black">
+                      Archived / Sunset (${scheme.retiredDetails.yearRetired})
+                    </span>
+                    <span class="px-2.5 py-0.5 rounded-md bg-stone-200 text-stone-700 text-xs font-bold">
+                      ${scheme.category}
+                    </span>
+                  </div>
+                  <h3 class="text-lg font-black text-stone-800">${scheme.name}</h3>
+                  <p class="text-xs text-stone-500 font-bold">${scheme.ministry}</p>
+                </div>
+              </div>
+
+              <div class="bg-stone-100 border border-stone-300 rounded-xl p-3.5 space-y-2 text-xs">
+                <span class="font-black text-stone-800 block">⚠️ Why This Scheme Was Retired:</span>
+                <p class="text-stone-700 font-medium">${scheme.retiredDetails.reason}</p>
+                <div class="pt-2 flex items-center justify-between border-t border-stone-200 mt-2">
+                  <span class="font-bold text-stone-600">Active Modern Replacement:</span>
+                  <button onclick="toggleSchemeStatusView(false); openChecklist('${scheme.retiredDetails.replacementSchemeId}')" class="text-xs font-black text-monarchOchre hover:underline">
+                    View ${scheme.retiredDetails.replacementSchemeName} ➔
+                  </button>
+                </div>
+              </div>
+            </div>
+          `;
+        }
+
+        // Render Active Scheme Card
+        return `
+          <div class="bg-monarchBaseCard border-2 border-monarchSage rounded-2xl p-6 shadow-xs hover:border-monarchSageDark transition-all space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+              <div>
+                <div class="flex items-center gap-2 mb-1.5 flex-wrap">
+                  <span class="px-2.5 py-0.5 rounded-md bg-monarchOchre text-white text-xs font-black">
+                    ✓ ${scheme.matchScore}% Match
+                  </span>
+                  <span class="px-2 py-0.5 rounded-md bg-monarchSage text-monarchBase text-xs font-black">
+                    Rank #${rankIdx + 1}
+                  </span>
+                  <span class="px-2.5 py-0.5 rounded-md bg-monarchSageLight text-monarchEspresso text-xs font-bold border border-monarchSage">
+                    ${scheme.category}
+                  </span>
+                </div>
+                <h3 class="text-lg font-black text-monarchEspresso">${scheme.name}</h3>
+                <p class="text-xs text-monarchEspressoLight font-bold">${scheme.ministry}</p>
+              </div>
+              <div class="sm:text-right shrink-0">
+                <span class="text-[10px] uppercase font-black text-monarchOchre tracking-wider block">Estimated Profit / Value</span>
+                <span class="text-xs font-black text-monarchEspresso bg-monarchSageLight border border-monarchSage px-2.5 py-1 rounded-lg inline-block mt-0.5">
+                  ₹${scheme.numericValue.toLocaleString('en-IN')} (${scheme.benefit})
+                </span>
+              </div>
+            </div>
+
+            <!-- DUAL BREAKDOWN: WHY YOU QUALIFY vs EXCLUSIONS -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
+              <!-- Meeting Eligibility Box -->
+              <div class="bg-emerald-50/70 border border-emerald-300 rounded-xl p-3.5 space-y-2">
+                <span class="text-xs font-black text-emerald-900 flex items-center gap-1.5">
+                  <span class="text-emerald-700">✓</span> Why You Meet Eligibility (Criteria Fulfilled):
+                </span>
+                <ul class="space-y-1.5 text-xs text-emerald-950 font-medium">
+                  ${scheme.whyQualify.map(q => `<li class="flex items-start gap-1.5"><span class="text-emerald-700 font-black">•</span> <span>${q}</span></li>`).join('')}
+                </ul>
+              </div>
+
+              <!-- Not Meeting Eligibility / Disqualifications Box -->
+              <div class="bg-amber-50/70 border border-amber-300 rounded-xl p-3.5 space-y-2">
+                <span class="text-xs font-black text-amber-900 flex items-center gap-1.5">
+                  <span class="text-amber-700">⚠️</span> Disqualification Rules (Watch Out For):
+                </span>
+                <ul class="space-y-1.5 text-xs text-amber-950 font-medium">
+                  ${scheme.whyNotQualify.map(dq => `<li class="flex items-start gap-1.5"><span class="text-amber-700 font-black">✕</span> <span>${dq}</span></li>`).join('')}
+                </ul>
+              </div>
+            </div>
+
+            <!-- Card Action Strip -->
+            <div class="pt-2 flex flex-wrap items-center justify-between gap-3 border-t border-monarchSage/30">
+              <button onclick="openChecklist('${scheme.id}')" class="text-xs font-black text-monarchOchre hover:text-monarchOchreHover flex items-center gap-1 cursor-pointer">
+                📄 Prepare Required Certificates (${scheme.documents.filter(d=>d.isMandatory).length} Mandatory + ${scheme.documents.filter(d=>!d.isMandatory).length} Top-Up) ➔
+              </button>
+              <div class="flex items-center gap-2">
+                <button onclick="toggleChat(true); sendQuickPrompt('Explain ${scheme.name} and why I should apply.');" class="px-3 py-1.5 rounded-lg border border-monarchSage hover:bg-monarchBaseLight text-monarchEspresso text-xs font-bold cursor-pointer">
+                  Ask AI Guidance
+                </button>
+                <button onclick="goToStep(5)" class="px-3.5 py-1.5 rounded-lg bg-monarchEspresso hover:bg-black text-amber-200 text-xs font-black cursor-pointer">
+                  Official Gateway ↗
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // --- Comparative Matrix Modal ---
+    function openComparisonModal() {
+      const modal = document.getElementById('comparisonModal');
+      const tbody = document.getElementById('comparisonTableBody');
+      const activeList = [...SCHEME_DB.filter(s => !s.isRetired)].sort((a, b) => b.numericValue - a.numericValue);
+
+      tbody.innerHTML = activeList.map((scheme, idx) => `
+        <tr class="hover:bg-monarchBaseLight/50">
+          <td class="p-3 font-bold text-monarchEspresso">
+            <span class="text-monarchOchre font-black mr-1">#${idx + 1}</span> ${scheme.name}
+          </td>
+          <td class="p-3 text-slate-600 font-medium">${scheme.category}</td>
+          <td class="p-3 font-black text-monarchOchre">₹${scheme.numericValue.toLocaleString('en-IN')} <span class="text-[10px] text-slate-500 font-normal">(${scheme.benefit})</span></td>
+          <td class="p-3 font-extrabold text-emerald-800">${scheme.matchScore}% Match</td>
+          <td class="p-3">
+            <button onclick="closeComparisonModal(); openChecklist('${scheme.id}');" class="px-2.5 py-1 rounded bg-monarchSageLight text-monarchEspresso font-bold hover:bg-monarchSage text-[11px]">
+              Review Docs
+            </button>
+          </td>
+        </tr>
+      `).join('');
+
+      modal.classList.remove('hidden');
+    }
+
+    function closeComparisonModal() {
+      document.getElementById('comparisonModal').classList.add('hidden');
+    }
+
+    // --- Checklist Functions (Step 4) ---
+    function openChecklist(schemeId) {
+      activeChecklistSchemeId = schemeId;
+      goToStep(4);
+    }
+
+    function renderChecklist() {
+      const scheme = SCHEME_DB.find(s => s.id === activeChecklistSchemeId) || SCHEME_DB[0];
+      document.getElementById('checklistHeaderTitle').textContent = `Checklist: ${scheme.name}`;
+
+      // Tab pills
+      const pillsContainer = document.getElementById('checklistSchemePills');
+      pillsContainer.innerHTML = SCHEME_DB.filter(s => !s.isRetired).map(s => `
+        <button onclick="openChecklist('${s.id}')" class="px-2.5 py-1 rounded-lg cursor-pointer ${
+          s.id === scheme.id ? 'bg-monarchEspresso text-amber-200 shadow-xs' : 'text-monarchEspresso hover:text-black'
+        }">${s.id.toUpperCase()}</button>
+      `).join('');
+
+      // Calculation for Mandatory items
+      const mandatoryDocs = scheme.documents.filter(d => d.isMandatory);
+      const optionalDocs = scheme.documents.filter(d => !d.isMandatory);
+
+      const totalMandatory = mandatoryDocs.length;
+      const readyMandatory = mandatoryDocs.filter(d => d.ready).length;
+      const pct = Math.round((readyMandatory / totalMandatory) * 100);
+
+      document.getElementById('checklistProgressText').textContent = `Mandatory Verification Progress: ${readyMandatory} of ${totalMandatory} Ready`;
+      document.getElementById('checklistProgressPct').textContent = `${pct}% Complete`;
+      document.getElementById('checklistProgressBar').style.width = `${pct}%`;
+
+      // Render Mandatory Documents
+      const mandatoryContainer = document.getElementById('mandatoryChecklistContainer');
+      mandatoryContainer.innerHTML = mandatoryDocs.map((doc, idx) => {
+        const fullIdx = scheme.documents.findIndex(d => d.id === doc.id);
+        return `
+          <div onclick="toggleDocReady('${scheme.id}', ${fullIdx})" class="p-4 flex items-center justify-between cursor-pointer transition-colors ${
+            doc.ready ? 'bg-monarchSageLight/40' : 'hover:bg-monarchBaseLight'
+          }">
+            <div class="flex items-center gap-3">
+              <input type="checkbox" ${doc.ready ? 'checked' : ''} class="w-4 h-4 rounded text-monarchOchre cursor-pointer" onclick="event.stopPropagation(); toggleDocReady('${scheme.id}', ${fullIdx})" />
+              <div>
+                <div class="flex items-center gap-1.5">
+                  <p class="text-sm font-bold ${doc.ready ? 'text-monarchEspresso line-through opacity-70' : 'text-monarchEspresso'}">${doc.name}</p>
+                  <!-- HOW TO GET ICON BUTTON -->
+                  <button type="button" onclick="event.stopPropagation(); openProcureModal('${scheme.id}', ${fullIdx})" class="w-5 h-5 rounded-full bg-monarchSageLight hover:bg-monarchSage text-monarchEspresso font-black text-[11px] flex items-center justify-center cursor-pointer shadow-2xs" title="Click to view how to get this document">
+                    ℹ
+                  </button>
+                </div>
+                <p class="text-xs text-monarchEspressoLight">Issuing Authority: ${doc.authority}</p>
+              </div>
+            </div>
+            <span class="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded bg-monarchSageLight border border-monarchSage text-monarchEspresso">
+              Mandatory
+            </span>
+          </div>
+        `;
+      }).join('');
+
+      // Render Optional Top-up Documents
+      const optionalContainer = document.getElementById('optionalChecklistContainer');
+      if (optionalDocs.length === 0) {
+        optionalContainer.innerHTML = `<div class="p-4 text-xs text-slate-500 font-medium">No optional top-up documents specified for this scheme.</div>`;
+      } else {
+        optionalContainer.innerHTML = optionalDocs.map((doc, idx) => {
+          const fullIdx = scheme.documents.findIndex(d => d.id === doc.id);
+          return `
+            <div onclick="toggleDocReady('${scheme.id}', ${fullIdx})" class="p-4 flex items-center justify-between cursor-pointer transition-colors ${
+              doc.ready ? 'bg-amber-100/50' : 'hover:bg-monarchBaseLight'
+            }">
+              <div class="flex items-center gap-3">
+                <input type="checkbox" ${doc.ready ? 'checked' : ''} class="w-4 h-4 rounded text-monarchOchre cursor-pointer" onclick="event.stopPropagation(); toggleDocReady('${scheme.id}', ${fullIdx})" />
+                <div>
+                  <div class="flex items-center gap-1.5">
+                    <p class="text-sm font-bold ${doc.ready ? 'text-monarchEspresso line-through opacity-70' : 'text-monarchEspresso'}">${doc.name}</p>
+                    <!-- HOW TO GET ICON BUTTON -->
+                    <button type="button" onclick="event.stopPropagation(); openProcureModal('${scheme.id}', ${fullIdx})" class="w-5 h-5 rounded-full bg-amber-200 hover:bg-amber-300 text-amber-900 font-black text-[11px] flex items-center justify-center cursor-pointer shadow-2xs" title="Click to view how to get this document">
+                      ℹ
+                    </button>
+                  </div>
+                  <p class="text-xs text-monarchOchre font-bold">✨ Top-Up Benefit: ${doc.topUpBenefit}</p>
+                  <p class="text-[11px] text-monarchEspressoLight">Issuer: ${doc.authority}</p>
+                </div>
+              </div>
+              <span class="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded bg-amber-100 border border-amber-300 text-amber-900">
+                Optional Top-Up
+              </span>
+            </div>
+          `;
+        }).join('');
+      }
+    }
+
+    function toggleDocReady(schemeId, docIdx) {
+      const scheme = SCHEME_DB.find(s => s.id === schemeId);
+      if (scheme && scheme.documents[docIdx]) {
+        scheme.documents[docIdx].ready = !scheme.documents[docIdx].ready;
+        renderChecklist();
+      }
+    }
+
+    // --- Document Procurement Modal Engine ---
+    function openProcureModal(schemeId, docIdx) {
+      const scheme = SCHEME_DB.find(s => s.id === schemeId);
+      if (!scheme || !scheme.documents[docIdx]) return;
+      const doc = scheme.documents[docIdx];
+
+      document.getElementById('procureModalDocName').textContent = doc.name;
+      document.getElementById('procureModalAuthority').textContent = doc.authority;
+      document.getElementById('procureModalSteps').textContent = doc.steps;
+      document.getElementById('procureModalTimeline').textContent = doc.turnaround;
+      document.getElementById('procureModalCost').textContent = doc.cost;
+
+      document.getElementById('docProcurementModal').classList.remove('hidden');
+    }
+
+    function closeProcureModal() {
+      document.getElementById('docProcurementModal').classList.add('hidden');
+    }
+
+    // --- Floating AI Chat Drawer Functions ---
+    function toggleChat(open) {
+      const drawer = document.getElementById('aiChatDrawer');
+      if (open) {
+        drawer.classList.remove('translate-x-full');
+      } else {
+        drawer.classList.add('translate-x-full');
+      }
+    }
+
+    function appendChatMessage(text, isUser = false) {
+      const container = document.getElementById('chatMessageStream');
+      const msgDiv = document.createElement('div');
+      msgDiv.className = `flex ${isUser ? 'justify-end' : 'justify-start'}`;
+      msgDiv.innerHTML = `
+        <div class="max-w-[85%] rounded-2xl p-3 leading-relaxed ${
+          isUser 
+            ? 'bg-monarchEspresso text-amber-100 rounded-br-xs' 
+            : 'bg-white text-monarchEspresso border border-monarchSage/50 shadow-2xs rounded-bl-xs'
+        }">
+          ${text}
+        </div>
+      `;
+      container.appendChild(msgDiv);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function sendQuickPrompt(promptText) {
+      appendChatMessage(promptText, true);
+      setTimeout(() => {
+        let reply = "Based on official Gazette guidelines, your parameters align with statutory limits for educational assistance and Direct Benefit Transfers.";
+        if (promptText.includes('Hindi')) {
+          reply = "आपके द्वारा दर्ज की गई जानकारी (ओबीसी वर्ग, ग्रामीण क्षेत्र, तथा ₹1 लाख से कम वार्षिक आय) के आधार पर आप उत्तर प्रदेश छात्रवृत्ति और डीबीटी सहायता के लिए पूर्णतः पात्र हैं।";
+        } else if (promptText.includes('profit')) {
+          reply = "The scheme with the highest financial yield on your profile is PM Surya Ghar (up to ₹78,000 direct capital subsidy), followed by PM SVANidhi (up to ₹50,000 working capital) and Post-Matric Scholarship (up to ₹48,500/year).";
+        } else if (promptText.includes('non-mandatory')) {
+          reply = "Non-mandatory documents (like Hosteller certificates or ALIMCO assessment slips) are not required for basic approval, but attaching them unlocks additional monthly top-up stipends and equipment upgrades!";
+        } else if (promptText.includes('Why am I eligible')) {
+          reply = "You meet all 3 core conditions: 1. Social reservation criteria met, 2. BPL/EWS economic slab verified, and 3. Age matches the student/higher-education bracket without disqualifying tax returns.";
+        }
+        appendChatMessage(reply, false);
+      }, 500);
+    }
+
+    function handleChatSubmit(e) {
+      e.preventDefault();
+      const input = document.getElementById('chatInputField');
+      const val = input.value.trim();
+      if (!val) return;
+      appendChatMessage(val, true);
+      input.value = '';
+
+      setTimeout(() => {
+        appendChatMessage("Statutory query recorded: Eligibility is determined by the Gazette criteria of the respective administrative Department. Keep your digital certificates updated on DigiLocker.", false);
+      }, 600);
+    }
+
+    // Initialize Default State
+    window.addEventListener('DOMContentLoaded', () => {
+      renderLanguageCards();
+    });
+  </script>
+</body>
+</html>
