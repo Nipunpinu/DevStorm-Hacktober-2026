@@ -28,8 +28,8 @@ app.add_middleware(
 app.include_router(api_router, prefix=settings.API_V1_PREFIX)
 
 # Health & Privacy Notice Endpoint
-@app.get("/health")
-@app.get("/api/health")
+@app.api_route("/health", methods=["GET", "HEAD"])
+@app.api_route("/api/health", methods=["GET", "HEAD"])
 def health_check():
     return {
         "status": "healthy",
@@ -47,7 +47,7 @@ project_html_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../
 frontend_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../frontend"))
 
 if os.path.exists(project_html_path):
-    @app.get("/")
+    @app.api_route("/", methods=["GET", "HEAD"])
     def serve_frontend_root():
         return FileResponse(project_html_path)
 
