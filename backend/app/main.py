@@ -36,7 +36,9 @@ def health_check():
         "service": settings.PROJECT_NAME,
         "version": settings.VERSION,
         "database": "connected",
-        "ai_configured": bool(settings.OPENAI_API_KEY and not settings.OPENAI_API_KEY.startswith("your_openai")),
+        "ai_configured": settings.is_ai_configured,
+        "ai_provider": "huggingface" if settings.effective_hf_token else ("openai" if settings.OPENAI_API_KEY else "offline"),
+        "ai_model": settings.effective_hf_model if settings.effective_hf_token else settings.OPENAI_MODEL,
         "privacy": "DPDP compliant. No Aadhaar or biometric data is collected or retained."
     }
 

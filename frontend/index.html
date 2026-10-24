@@ -1590,7 +1590,7 @@
     }
 
     // Safe DOM message creation (Preventing XSS)
-    function appendChatMessage(text, isUser = false) {
+    function appendChatMessage(text, isUser = false, sources = [], provider = '') {
       const container = document.getElementById('chatMessageStream');
       const msgDiv = document.createElement('div');
       msgDiv.className = `flex ${isUser ? 'justify-end' : 'justify-start'}`;
@@ -1600,7 +1600,17 @@
           ? 'bg-monarchEspresso text-amber-100 rounded-br-xs'
           : 'bg-white text-monarchEspresso border border-monarchSage/50 shadow-2xs rounded-bl-xs'
         }`;
-      bubble.textContent = text;
+      
+      const textSpan = document.createElement('div');
+      textSpan.textContent = text;
+      bubble.appendChild(textSpan);
+
+      if (!isUser && sources && sources.length > 0) {
+        const metaDiv = document.createElement('div');
+        metaDiv.className = 'mt-2 pt-1.5 border-t border-monarchSage/30 text-[10px] text-monarchEspressoLight flex items-center gap-1';
+        metaDiv.innerHTML = `<span>📜 <strong>Grounding:</strong> ${escapeHtml(sources.join(', '))}</span>`;
+        bubble.appendChild(metaDiv);
+      }
 
       msgDiv.appendChild(bubble);
       container.appendChild(msgDiv);
@@ -1646,7 +1656,7 @@
 
         if (response.ok) {
           const data = await response.json();
-          appendChatMessage(data.reply, false);
+          appendChatMessage(data.reply, false, data.grounded_in_sources, data.provider);
           chatHistory.push({ role: 'assistant', content: data.reply });
         } else {
           appendChatMessage("⚠️ Connection error: Unable to contact YojanaSetu AI service.", false);

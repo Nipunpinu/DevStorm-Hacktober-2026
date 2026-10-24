@@ -19,6 +19,7 @@ class ChatResponse(BaseModel):
     scheme_slug: Optional[str] = None
     is_ai_generated: bool
     grounded_in_sources: List[str] = []
+    provider: Optional[str] = "huggingface"
     disclaimer: str = (
         "Preliminary AI guidance only. Final benefit sanctions and certificate verification "
         "remain subject to competent departmental authorities."

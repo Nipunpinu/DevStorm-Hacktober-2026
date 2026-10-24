@@ -89,8 +89,15 @@ Edit `backend/.env` to configure your settings:
 # Database: SQLite for local dev, PostgreSQL compatible
 DATABASE_URL=sqlite:///./yojanasetu.db
 
-# OpenAI API Key (Required for live AI explanations and chat)
-OPENAI_API_KEY=sk-your-openai-api-key
+# Hugging Face Inference Providers Configuration (Recommended)
+# Official documentation: https://huggingface.co/docs/inference-providers/index
+HF_TOKEN=hf_your_huggingface_user_access_token
+HF_MODEL=deepseek-ai/DeepSeek-V3-0324
+# Optional provider routing (leave empty for automatic HF routing or specify: together, groq, novita, etc.)
+HF_PROVIDER=
+
+# OpenAI API Key (Optional alternative provider)
+OPENAI_API_KEY=
 OPENAI_MODEL=gpt-4o-mini
 
 # CORS Origin for Frontend
@@ -102,7 +109,9 @@ JWT_ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=1440
 ```
 
-> **Note:** If `OPENAI_API_KEY` is not provided or offline, YojanaSetu **gracefully falls back** to deterministic SQL scheme records and clearly notifies the user, without crashing or returning fake answers.
+> **Security & Privacy Note:** Tokens (`HF_TOKEN` / `OPENAI_API_KEY`) must **NEVER** be committed to Git. `backend/.env` is strictly git-ignored. Tokens are never exposed in HTML, JavaScript, or public API responses.
+>
+> **Fallback & Grounding:** If `HF_TOKEN` is not configured, expired, or rate-limited, YojanaSetu **gracefully falls back** to verified database records and clear local guidance without crashing or fabricating schemes.
 
 ### 4. Initialize Database & Run Migrations
 
@@ -135,7 +144,53 @@ uvicorn backend.app.main:app --host 127.0.0.1 --port 8000 --reload
 The system will now be live:
 - **Web Application:** [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
 - **Interactive OpenAPI Docs (Swagger UI):** [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
-- **Health Check & DPDP Notice:** [http://127.0.0.1:8000/health](http://127.0.0.1:8000/health)
+- **Health Check & AI Provider Status:** [http://127.0.0.1:8000/health](http://127.0.0.1:8000/health)
+- **Safe Hugging Face Diagnostic Test:** [http://127.0.0.1:8000/api/assistant/test-hf](http://127.0.0.1:8000/api/assistant/test-hf)
+
+---
+
+## Hugging Face Inference Providers Integration
+
+YojanaSetu leverages the official `huggingface_hub` Python SDK with `InferenceClient` to interface with modern open-weights foundation models routed via the [Hugging Face Inference Providers](https://huggingface.co/docs/inference-providers/index) network (`router.huggingface.co`).
+
+### 1. Diagnostic Verification (No Secrets Leaked)
+Test your Hugging Face configuration and model routing without sending any citizen personal data:
+
+```bash
+curl -s http://127.0.0.1:8000/api/assistant/test-hf
+```
+
+Sample Response:
+```json
+{
+  "configured": true,
+  "provider": "huggingface",
+  "status": "connected",
+  "model": "deepseek-ai/DeepSeek-V3-0324",
+  "token_masked": "hf_cUl...Jyre",
+  "message": "Hugging Face Inference Provider connection verified successfully."
+}
+```
+
+### 2. Live Citizen Assistant Chat
+Engage the multilingual AI assistant grounded in verified database facts:
+
+```bash
+curl -s -X POST http://127.0.0.1:8000/api/assistant/chat \
+  -H "Content-Type: application/json" \
+  -d '{
+    "message": "What documents are required to apply for PM Surya Ghar?",
+    "language": "en",
+    "scheme_slug": "pm-surya"
+  }'
+```
+
+### 3. Safe Error & Billing Handling
+The integration handles all HTTP and provider errors safely:
+- **HTTP 401 Unauthorized:** Prompts administrator to verify `HF_TOKEN` in `backend/.env`.
+- **HTTP 402 Payment Required:** Informs administrator that third-party inference provider credits are required on Hugging Face ([huggingface.co/settings/billing](https://huggingface.co/settings/billing)). Automatically provides verified SQL database scheme information to the user.
+- **HTTP 429 Rate Limit:** Advises retry with exponential backoff while delivering cached facts.
+- **HTTP 503 Service Unavailable / Timeout:** Gracefully falls back to localized deterministic rules and scheme details without crashing.
 
 ---
 
@@ -169,6 +224,7 @@ YojanaSetu natively supports 14 languages across all form fields, results, docum
 | `GET` | `/api/schemes/{slug}` | Detailed scheme view with conditions, benefits, documents, and verified sources |
 | `GET` | `/api/schemes/{slug}/checklist` | Mandatory vs. optional top-up document checklist with turnaround and fees |
 | `POST` | `/api/assistant/chat` | Live AI assistant grounded in verified SQL scheme records |
+| `GET` | `/api/assistant/test-hf` | Diagnostic test for Hugging Face Inference Provider connection |
 | `GET` | `/api/languages` | Supported languages metadata with RTL direction indicators |
 | `GET` | `/api/languages/{code}/translations` | Localized translation dictionaries |
 | `GET` | `/api/sources/summary` | Real-time verification status across government gazettes |
@@ -189,7 +245,12 @@ source .venv/bin/activate
 pytest backend/tests/ -v
 ```
 
-All 16 test suites verify:
+All 26 test suites verify:
+- Hugging Face `InferenceClient` initialization and provider routing
+- Multilingual prompt generation across 14 Indian languages
+- Deterministic eligibility rule integrity preserved (LLM never overrides SQL rules engine)
+- Safe handling of Hugging Face errors (401 Auth, 402 Payment Required / credits, 429 Rate Limit, Model not supported)
+- Diagnostic endpoint `/api/assistant/test-hf` (confirms tokens are never exposed)
 - Database schema and relationship integrity
 - Deterministic eligibility evaluation (`potential_match`, `does_not_match`, `needs_verification`)
 - Missing information handling (does not assume ineligibility)

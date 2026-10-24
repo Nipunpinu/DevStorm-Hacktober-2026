@@ -53,5 +53,17 @@ def chat_with_assistant(
         language=payload.language,
         scheme_slug=payload.scheme_slug,
         is_ai_generated=result.get("is_ai_generated", False),
-        grounded_in_sources=result.get("grounded_in_sources", [])
+        grounded_in_sources=result.get("grounded_in_sources", []),
+        provider=result.get("provider", "huggingface")
     )
+
+
+@router.get("/test-hf")
+def test_huggingface_connection():
+    """
+    GET /api/assistant/test-hf
+    Safe diagnostic verification of Hugging Face Inference Providers connection.
+    Tests connectivity without exposing tokens or personal citizen data.
+    """
+    from backend.app.services.llm_service import test_hf_connection
+    return test_hf_connection()
