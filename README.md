@@ -137,6 +137,7 @@ python backend/scripts/init_admin.py --username admin --email admin@yojanasetu.g
 
 ### 7. Start the FastAPI Server
 
+<<<<<<< HEAD
 ```bash
 uvicorn backend.app.main:app --host 127.0.0.1 --port 8000 --reload
 ```
@@ -284,3 +285,6 @@ Then run `alembic upgrade head`. All SQLAlchemy schemas, column types, and forei
 1. **No Sensitive PII Retained:** YojanaSetu adheres to the Digital Personal Data Protection (DPDP) Act. No Aadhaar numbers, biometric data, or financial bank account credentials are ever collected or stored.
 2. **Preliminary Guidance Only:** Match statuses and document readiness calculations are derived strictly from published operational gazettes. Final sanction and fund disbursement remain under the exclusive statutory authority of the designated government departments.
 3. **Transparent External Handoff:** Official benefit submission requires authentication on authorized `.gov.in` gateways (such as NSP, PM-KISAN, or Swavlamban). YojanaSetu never charges processing fees or claims to replace official departmental submissions.
+=======
+We have used MIT LICENSE.
+>>>>>>> aa60df49fbb816140ee8a2bfcf540e02c7015de5
